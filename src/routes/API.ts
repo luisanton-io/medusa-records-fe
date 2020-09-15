@@ -1,9 +1,11 @@
 import { Credentials } from "../models/Credentials";
 import { ReleaseData } from "../models/ReleaseData";
 
-const loginURL    = process.env.REACT_APP_PUBLIC_URL + "/login"
-const releasesURL = process.env.REACT_APP_PUBLIC_URL + "/releases"
-const uploadsURL  = process.env.REACT_APP_PUBLIC_URL + "/upload"
+const endpoint = {
+    login:    process.env.REACT_APP_ENDPOINT_ROOT + "/login",
+    releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
+    upload:   process.env.REACT_APP_ENDPOINT_ROOT + "/upload"
+}
 
 const jsonHeaders = new Headers({ 
     "Content-Type": "application/json"
@@ -11,42 +13,47 @@ const jsonHeaders = new Headers({
 
 export const API = {
     login: (credentials: Credentials) => {
-        return fetch(loginURL, {
-            method: "POST",
-            headers: jsonHeaders,
-            body: JSON.stringify(credentials)
-        })
+        return fetch(
+            endpoint.login, 
+            {
+                method: "POST",
+                headers: jsonHeaders,
+                body: JSON.stringify(credentials)
+            }
+        )
     },
     releases: {
-        get: () => {
-            return fetch(releasesURL)
-        },
-        post: (data: ReleaseData) => {
-            return fetch(releasesURL, {
+        get: () => fetch(endpoint.releases),
+        post: (data: ReleaseData) => fetch(
+            endpoint.releases, 
+            {
                 method: "POST",
                 headers: jsonHeaders,
                 body: JSON.stringify(data)
-            })
-        },
-        put: (data: ReleaseData) => {
-            return fetch(releasesURL, {
+            }
+        ),
+        put: (data: ReleaseData) => fetch(
+            endpoint.releases, 
+            {
                 method: "PUT",
                 headers: jsonHeaders,
                 body: JSON.stringify(data),
                 credentials: "include"
-            })
-        },
-        delete: (releaseId: string) => {
-            return fetch(`${releasesURL}/${releaseId}`, {
+            }
+        ),
+        delete: (releaseId: string) => fetch(
+            `${endpoint.releases}/${releaseId}`, 
+            {
                 method: "DELETE",
                 credentials: "include"
-            })
-        }
+            }
+        )
     },
     uploadImage: (file: File) => {
         const formData = new FormData()
         formData.append('image', file)
-        return fetch(uploadsURL, {
+
+        return fetch(endpoint.upload, {
             method: "POST",
             headers: { "Content-Type": "multipart/form-data" },
             body: formData            

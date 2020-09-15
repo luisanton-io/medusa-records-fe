@@ -3,7 +3,6 @@ import Login from '../components/Login'
 import Home from '../components/Home'
 import Submit from '../components/Submit'
 
-
 class SubmissionsRoutes { 
     root = "/submissions"
     pending = this.root + "/pending"
