@@ -1,12 +1,9 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { API } from './routes/API';
 
-function App() {
+export default function App() {
+  console.log(API.uploadImage)
   return (
-    <div className="App">
-    </div>
+    <div> I am app </div>
   );
 }
-
-export default App;
