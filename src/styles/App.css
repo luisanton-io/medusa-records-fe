@@ -1,0 +1,31 @@
+@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@200;400;500;700&display=swap');
+
+#root {
+    min-height: 100vh;
+}
+
+:root {
+    --frost: #fcfcff;
+    --link: #b8b8b8;
+    --link-hover: rgb(255, 208, 38);
+}
+
+body {
+    background-color: #424242;
+    color: var(--frost);
+    font-family: 'Barlow', sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+}
+
+a {
+    color: var(--link)
+}
+
+a:hover {
+    color: var(--link-hover);
+    font-weight: 500;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+}

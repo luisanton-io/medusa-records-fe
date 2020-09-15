@@ -1,9 +1,10 @@
-import Login from '../components/public/Login'
-import Home from '../components/public/Home'
-import Submit from '../components/public/Submit'
-import SelectSubsList from '../components/private/SelectSubsList'
-import Submissions from '../components/private/Submissions'
+import Login from '../pages/public/Login'
+import Home from '../pages/public/Home'
+import Submit from '../pages/public/Submit'
+import Submissions from '../pages/private/submissions'
+import SelectSubsList from '../pages/private/submissions/Selection'
 import { RouteProps } from 'react-router-dom'
+import NotFound from '../pages/NotFound'
 
 class SubmissionsRoutes { 
     selectList = "/submissions"
@@ -53,5 +54,8 @@ export const routeProps: RouteProps[] = [
         ],
         component: Submissions,
         exact: true
+    },
+    {
+        component: NotFound //404
     }
 ]
