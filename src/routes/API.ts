@@ -18,7 +18,8 @@ export const API = {
             {
                 method: "POST",
                 headers: jsonHeaders,
-                body: JSON.stringify(credentials)
+                body: JSON.stringify({credentials}),
+                credentials: "include"
             }
         )
     },

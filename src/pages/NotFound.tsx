@@ -12,7 +12,7 @@ export default function NotFound() {
                 <Col xs={9} md={6} className="m-auto d-flex">
                     <Row>
                         <Col xs={12} className="d-flex">
-                            <Image fluid className="mx-auto w-50" src="/medusa-original.png" draggable={false} />
+                            <Image fluid className="mx-auto w-50" src="/assets/medusa-original.png" draggable={false} />
                         </Col>
                         <Col xs={12} className="d-flex">
                             <h3 className="mx-auto">
