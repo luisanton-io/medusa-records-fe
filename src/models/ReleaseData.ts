@@ -3,10 +3,11 @@ export interface ReleaseData {
     lastName: string, 
     email: string,
     mainArtist: string,
-    featurings: string,
-    trackName: string,
-    releaseDate: Date,
+    featurings?: string,
+    title: string,
+    date: Date,
     genre: string,
-    link: string,
-    cover: string   
+    audioURL: string,
+    coverURL: string
+    altContact?: string
 }
