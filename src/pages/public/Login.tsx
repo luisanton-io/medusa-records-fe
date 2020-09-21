@@ -75,8 +75,9 @@ export default withRouter(function SignIn() {
           <WarningIcon /> Staff only <WarningIcon />
         </Typography>
         <span>Keep out.</span>
-        <form className={classes.form} noValidate onSubmit={ didSubmit }>
+        <form className={classes.form} noValidate onSubmit={ (submitEvent) => credentials.username.length > 0 && credentials.password.length > 0 && didSubmit(submitEvent) }>
           <TextField
+            InputLabelProps={{ required: false }} 
             variant="outlined"
             className={classes.textField}
             margin="normal"
@@ -94,6 +95,7 @@ export default withRouter(function SignIn() {
             autoFocus
             />
           <TextField
+            InputLabelProps={{ required: false }} 
             variant="outlined"
             className={classes.textField}
             margin="normal"

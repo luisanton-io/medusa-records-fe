@@ -11,3 +11,15 @@ export interface ReleaseData {
     coverURL: string
     altContact?: string
 }
+
+export const emptyRelease: ReleaseData = {
+    firstName: "",
+    lastName: "",
+    email: "",
+    mainArtist: "",
+    title: "",
+    date: new Date(),
+    genre: "",
+    audioURL: "",
+    coverURL: ""
+}

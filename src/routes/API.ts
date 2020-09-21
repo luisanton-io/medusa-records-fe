@@ -1,5 +1,5 @@
 import { Credentials } from "../models/Credentials";
-import { ReleaseData } from "../models/ReleaseData";
+import { ReleaseData } from "../models/Release";
 
 const endpoint = {
     login:    process.env.REACT_APP_ENDPOINT_ROOT + "/login",
