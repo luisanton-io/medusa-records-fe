@@ -14,6 +14,7 @@ const theme = createMuiTheme({
   },
   typography: {
     fontFamily: [
+      'Circular',  
       'Barlow',
       '-apple-system',
       'BlinkMacSystemFont',

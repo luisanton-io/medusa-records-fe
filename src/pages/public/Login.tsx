@@ -64,7 +64,7 @@ export default withRouter(function SignIn() {
   return (
     <Container component="main" maxWidth="xs" className="my-auto">
       <img 
-        className="login-bg" 
+        className="image-bg" 
         alt="login wallpaper"
         src="/assets/login-bg.jpg" 
         style={{top: "0", left: "0", opacity: "0.5" }} />

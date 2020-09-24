@@ -1,12 +1,14 @@
+import { Genre } from "./Genre";
+
 export interface ReleaseData {
     firstName: string,
     lastName: string, 
     email: string,
-    mainArtist: string,
+    mainArtists: string,
     featurings?: string,
     title: string,
     date: Date,
-    genre: string,
+    genre?: Genre,
     audioURL: string,
     coverURL: string
     altContact?: string
@@ -16,10 +18,9 @@ export const emptyRelease: ReleaseData = {
     firstName: "",
     lastName: "",
     email: "",
-    mainArtist: "",
+    mainArtists: "",
     title: "",
-    date: new Date(),
-    genre: "",
+    date: new Date(),//.toISOString().slice(0,10),
     audioURL: "",
     coverURL: ""
 }
