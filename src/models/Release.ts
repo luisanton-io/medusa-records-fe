@@ -10,7 +10,7 @@ export interface ReleaseData {
     date: Date,
     genre?: Genre,
     audioURL: string,
-    coverURL: string
+    coverBase64?: string
     altContact?: string
 }
 
@@ -22,5 +22,4 @@ export const emptyRelease: ReleaseData = {
     title: "",
     date: new Date(),//.toISOString().slice(0,10),
     audioURL: "",
-    coverURL: ""
 }
