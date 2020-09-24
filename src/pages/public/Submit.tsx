@@ -74,7 +74,14 @@ export default function Submit() {
     severity: "error" as Color
   })
 
-  const alertInvalid = () => {}
+  const alertInvalid = (invalidEvent: React.SyntheticEvent) => {
+    // invalidEvent.preventDefault()
+    setAlert({
+      display: true,
+      message: "Fill in all required fields",
+      severity: "error"
+    })
+  }
 
   const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
@@ -355,7 +362,7 @@ export default function Submit() {
                 accept="jpg, png"
                 id="outlined-button-file"
                 type="file"
-                style={{ display: "none" }}
+                className="hidden-input"
                 onClick={() => { if (alert.display) setAlert({ ...alert, display: false }) }}
                 onChange={didSelectFile}
               />
@@ -364,8 +371,16 @@ export default function Submit() {
                 style={{ border: "1px solid grey" }}
                 htmlFor="outlined-button-file"
               >
-                <span className="m-auto" style={{ opacity: "0.7", fontSize: "1rem" }}>Choose file</span>
+                <span className="m-auto" style={{ fontSize: "1rem" }}>Choose file</span>
               </label>
+              {/* <label
+                className={classes.textField + " w-100 h-100 d-flex cursor-pointer file-picker"}
+                style={{ border: "1px solid grey" }}
+                htmlFor="outlined-button-file"
+              >
+                <button onClick= className="m-auto w-100 h-100 btn bg-transparent border-none" style={{ opacity: "0.7", fontSize: "1rem" }}>Choose file</button>
+              </label> */}
+
             </Grid>
             <Grid item xs={12} className="d-flex">
               {
