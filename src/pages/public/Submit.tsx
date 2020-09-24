@@ -11,6 +11,10 @@ import MenuItem from '@material-ui/core/MenuItem/MenuItem';
 import { Genre } from '../../models/Genre';
 import InputLabel from '@material-ui/core/InputLabel/InputLabel';
 import uniqid from 'uniqid'
+import Snackbar from "@material-ui/core/Snackbar";
+import MuiAlert from "@material-ui/lab/Alert";
+import { Color } from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles((theme) => ({
   formControl: {
@@ -45,14 +49,22 @@ const useStyles = makeStyles((theme) => ({
 export default function Submit() {
   const classes = useStyles()
   const [release, setRelease] = useState(emptyRelease)
-  const [imageB64, setImageB64]
-  : [string | undefined, React.Dispatch<React.SetStateAction<string | undefined>>] 
-  = useState()
+  const [imageB64, setImageB64]: [string | undefined, React.Dispatch<React.SetStateAction<string | undefined>>] = useState()
+  const [alert, setAlert] = useState({
+    display: false,
+    message: "",
+    severity: "error" as Color
+  })
 
   const didSubmit = (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
     console.log("submitting...")
     console.log(release)
+    setAlert({
+      display: true,
+      message: "All good! Well done.",
+      severity: "success"
+    })
   }
 
   const didSelectGenre = (selectEvent: React.ChangeEvent<{ value: unknown }>) => {
@@ -61,19 +73,38 @@ export default function Submit() {
   }
 
 
-  const didSelectFile = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const didSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     // const name = event.currentTarget.name
-    const file = event.currentTarget.files![0]
-
-    
+    const filePicker = e.currentTarget
+    const file = filePicker.files![0]
 
     const reader = new FileReader();
         reader.onload = (event) => {
             const fileExt = file.name.split('.').pop()?.toLowerCase()
             if (fileExt && ['jpg', 'png'].includes(fileExt)) {
                 const base64 = event.target!.result as string
-                setImageB64( base64 )
-            } else alert("Unsupported file type!")    
+                const img = new Image()
+
+                img.onload = function () {
+                  console.log(img.naturalHeight)
+                  if (img.naturalHeight===3000 && img.naturalWidth===3000) 
+                    setImageB64( base64 )
+                  else {
+                    setAlert({
+                      display: true,
+                      message: "Cover image must be exactly 3000x3000.",
+                      severity: "error"
+                    })
+                    filePicker.value = ''
+                  }
+                }
+                
+                img.src = base64
+            } else setAlert({
+                display: true,
+                message:"Unsupported file type!",
+                severity: "error"
+            })    
         };
         reader.onerror = (event) => {
             console.error("File could not be read! Code " + event.target!.error!.code);
@@ -82,17 +113,28 @@ export default function Submit() {
 
   }
 
+  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
+    if (reason !== "clickaway") setAlert({...alert, display: false});
+  };
+
   return (<Container component="main" maxWidth="sm" className="my-auto">
+    <Snackbar open={alert.display} autoHideDuration={6000} onClose={handleClose}>
+      <MuiAlert
+        elevation={6}
+        variant="filled"
+        onClose={handleClose}
+        severity={alert.severity}
+      >
+        {alert.message}
+      </MuiAlert>
+    </Snackbar>
     <CssBaseline />
     <img alt="..." className="image-bg submit-bg" style={{opacity: "0.1"}} src="/assets/submit-bg.jpg" />
     <div className={classes.paper}>
       <Typography component="h1" variant="h2" className="mt-5" style={
         {
           fontWeight: 800,
-          fontFamily: "Circular"
-          // fontWeight: 800,
-          // fontFamily: "Circular"
-      
+          fontFamily: "Circular"      
         }}>
         Submit your track.
         </Typography>
@@ -149,8 +191,7 @@ export default function Submit() {
               id="email"
               autoComplete="email"
               onChange={(e) => setRelease({
-                ...release,
-                email: e.currentTarget.value!
+                ...release, email: e.currentTarget.value!
               })}
               value={release.email}
             />
@@ -184,8 +225,7 @@ export default function Submit() {
               id="featurings"
               autoComplete="featurings"
               onChange={(e) => setRelease({
-                ...release,
-                featurings: e.currentTarget.value!
+                ...release, featurings: e.currentTarget.value!
               })}
               value={release.featurings}
             />
@@ -202,8 +242,7 @@ export default function Submit() {
               id="title"
               autoComplete="release-title"
               onChange={(e) => setRelease({
-                ...release,
-                title: e.currentTarget.value!
+                ...release, title: e.currentTarget.value!
               })}
               value={release.title}
             />
@@ -221,7 +260,9 @@ export default function Submit() {
                 id="date-picker-inline"
                 label="Release Date"
                 value={release.date}
-                onChange={(date: MaterialUiPickersDate) => setRelease({ ...release, date: date! as Date })}
+                onChange={ (date: MaterialUiPickersDate) => 
+                  setRelease({ ...release, date: date! as Date })
+                }
                 KeyboardButtonProps={{
                   'aria-label': 'change date',
                 }}
@@ -238,13 +279,12 @@ export default function Submit() {
               <Select
                 labelId="select-genre-label"
                 id="select-genre"
-                value={release.genre}
+                defaultValue={''}
                 onChange={didSelectGenre}
               >
                 {
-                  Object.entries(Genre).map(([key, value]) => {
-                    return <MenuItem value={key} key={uniqid()}>{value}</MenuItem>
-                  }
+                  Object.entries(Genre).map( ([key, value]) => 
+                     <MenuItem value={key} key={uniqid()}>{value}</MenuItem>
                   )
                 }
               </Select>
@@ -271,32 +311,13 @@ export default function Submit() {
             />
           </Grid>
           <Grid item xs={12} className="pt-0 d-flex flex-column">
-            {/* <TextField
-                variant="outlined"
-                className={classes.textField}
-                margin="normal"
-                required  
-                fullWidth
-                type="file"
-                name="cover"
-                label="Choose cover image"
-                id="coverImage"
-                InputLabelProps={{
-                  shrink: true
-                }}
-                onChange={ (e) => setRelease({
-                    ...release,
-                    coverURL: e.currentTarget.value!
-                    })}
-                    value={release.coverURL}
-                    /> */}
-
               <InputLabel id="select-file-label">Upload cover image:</InputLabel>
               <input
                 accept="jpg, png"
                 id="outlined-button-file"
                 type="file"
                 style={{ display: "none" }}
+                onClick={() => {if (alert.display) setAlert({...alert, display: false})} }
                 onChange={ didSelectFile }
               />
               <label
@@ -306,13 +327,15 @@ export default function Submit() {
               >
                 <span className="m-auto" style={{ opacity: "0.7", fontSize: "1rem" }}>Choose file</span>
               </label>
-
-
           </Grid>
           <Grid item xs={12} className="d-flex">
             {
               imageB64 && 
-              <img alt="..." src={imageB64} className="w-75 mx-auto" onLoad={({target:img}) => console.log((img as HTMLElement).offsetWidth + " " + (img as HTMLElement).offsetHeight)}/>
+              <img 
+                alt="..." 
+                src={imageB64} 
+                className="w-75 mx-auto"
+                />
             }
           </Grid>
           <Grid item xs={12}>
