@@ -29,6 +29,7 @@ import {
 } from '@material-ui/pickers'
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import MuiAlert, { Color } from "@material-ui/lab/Alert";
+import { API } from '../../routes/API';
 //#endregion
 
 //#region Styles
@@ -73,30 +74,35 @@ export default function Submit() {
     severity: "error" as Color
   })
 
-  const didSubmit = (submitEvent: React.FormEvent<HTMLFormElement>) => {
+  const alertInvalid = () => {}
+
+  const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
     console.log("submitting...")
     console.log(release)
+    const response = await API.releases.post(release)
+    const { message } = await response.json()
+    
     setAlert({
       display: true,
-      message: "All good! Well done.",
-      severity: "success"
+      message: message,
+      severity: response.status === 201 ? "success" : "error"
     })
   }
 
-  const didSelectGenre = (selectEvent: React.ChangeEvent<{ value: unknown }>) => {
-    console.log(selectEvent.target.value)
-    setRelease({ ...release, genre: selectEvent.target.value as Genre })
+  const didSelectGenre = ({target}: React.ChangeEvent<{ value: unknown }>) => {
+    setRelease({ ...release, genre: target.value as Genre })
   }
 
   const didSelectFile = (e: React.ChangeEvent<HTMLInputElement>) => {
     const filePicker = e.currentTarget
     const file = filePicker.files![0]
 
-    if (file.size > 5242880) {
+    if (!file) return 
+    else if (file.size > 7340032) {
       setAlert({
         display: true,
-        message: "Max size allowed: 5 MB.",
+        message: "Max size allowed: 7 MB.",
         severity: "error"
       })
       return 
@@ -172,7 +178,7 @@ export default function Submit() {
           Submit your track.
         </Typography>
         <span className="ml-auto mb-5">...if it doesn't suck.</span>
-        <form className={classes.form} noValidate onSubmit={didSubmit}>
+        <form className={classes.form} onSubmit={didSubmit} onInvalid={alertInvalid}>
           <Grid container spacing={3} >
             <Grid item xs={12} sm={6} className="py-0">
               <TextField
@@ -315,8 +321,8 @@ export default function Submit() {
                   onChange={didSelectGenre}
                 >
                   {
-                    Object.entries(Genre).map(([key, value]) =>
-                      <MenuItem value={key} key={uniqid()}>{value}</MenuItem>
+                    Object.values(Genre).map( value =>
+                      <MenuItem value={value} key={uniqid()}>{value}</MenuItem>
                     )
                   }
                 </Select>
