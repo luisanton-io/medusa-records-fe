@@ -2,7 +2,7 @@ import React from 'react';
 import { Route, BrowserRouter, Switch } from 'react-router-dom';
 import { routeProps } from './routes/Routes';
 import uniqid from 'uniqid'
-import './styles/App.css'
+import './styles/App.scss'
 import { ThemeProvider } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core';
 import { yellow } from '@material-ui/core/colors';

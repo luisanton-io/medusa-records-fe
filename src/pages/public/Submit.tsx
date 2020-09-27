@@ -151,6 +151,7 @@ export default function Submit() {
     reader.onerror = (event) => {
       console.error("File could not be read! Code " + event.target!.error!.code);
     };
+
     reader.readAsDataURL(file);
   
   }
@@ -328,8 +329,8 @@ export default function Submit() {
                   onChange={didSelectGenre}
                 >
                   {
-                    Object.values(Genre).map( value =>
-                      <MenuItem value={value} key={uniqid()}>{value}</MenuItem>
+                    Object.entries(Genre).map( ([key, value]) =>
+                      <MenuItem value={value} key={key}>{value}</MenuItem>
                     )
                   }
                 </Select>
@@ -362,7 +363,7 @@ export default function Submit() {
                 accept="jpg, png"
                 id="outlined-button-file"
                 type="file"
-                className="hidden-input"
+                className="no-dimensions"
                 onClick={() => { if (alert.display) setAlert({ ...alert, display: false }) }}
                 onChange={didSelectFile}
               />
@@ -373,14 +374,6 @@ export default function Submit() {
               >
                 <span className="m-auto" style={{ fontSize: "1rem" }}>Choose file</span>
               </label>
-              {/* <label
-                className={classes.textField + " w-100 h-100 d-flex cursor-pointer file-picker"}
-                style={{ border: "1px solid grey" }}
-                htmlFor="outlined-button-file"
-              >
-                <button onClick= className="m-auto w-100 h-100 btn bg-transparent border-none" style={{ opacity: "0.7", fontSize: "1rem" }}>Choose file</button>
-              </label> */}
-
             </Grid>
             <Grid item xs={12} className="d-flex">
               {
