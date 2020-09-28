@@ -27,6 +27,7 @@ import {
   MuiPickersUtilsProvider,
   KeyboardDatePicker
 } from '@material-ui/pickers'
+import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import MuiAlert, { Color } from "@material-ui/lab/Alert";
 import { API } from '../../routes/API';
@@ -68,6 +69,9 @@ export default function Submit() {
   const classes = useStyles()
 
   const [release, setRelease] = useState(emptyRelease)
+  const [typingArtist, setTypingArtist] = useState("")
+  const [typingFeats, setTypingFeats] = useState("")
+
   const [alert, setAlert] = useState({
     display: false,
     message: "",
@@ -162,7 +166,8 @@ export default function Submit() {
 
   return (
     <Container component="main" maxWidth="sm" className="my-auto">
-      <Snackbar open={alert.display} autoHideDuration={6000} onClose={handleClose}>
+      <Snackbar open={alert.display} 
+      autoHideDuration={6000} onClose={handleClose}>
         <MuiAlert
           elevation={6}
           variant="filled"
@@ -186,7 +191,8 @@ export default function Submit() {
           Submit your track.
         </Typography>
         <span className="ml-auto mb-5">...if it doesn't suck.</span>
-        <form className={classes.form} onSubmit={didSubmit} onInvalid={alertInvalid}>
+        <form className={classes.form} 
+          onSubmit={didSubmit} onInvalid={alertInvalid}>
           <Grid container spacing={3} >
             <Grid item xs={12} sm={6} className="py-0">
               <TextField
@@ -244,38 +250,84 @@ export default function Submit() {
               />
             </Grid>
             <Grid item xs={12} className="py-0">
-              <TextField
-                variant="outlined"
-                className={classes.textField}
-                margin="normal"
-                required
-                fullWidth
-                name="mainArtists"
-                label="Main Artists (separated by comma)"
-                id="mainArtists"
-                autoComplete="main-artist"
-                onChange={(e) => setRelease({
-                  ...release,
-                  mainArtists: e.currentTarget.value!
-                })}
+              <Autocomplete
+                multiple
+                freeSolo
+                options={[]}
                 value={release.mainArtists}
+                inputValue={typingArtist}
+                onChange={(event, newValue) => {
+                  setRelease({
+                    ...release, 
+                    mainArtists: newValue as Array<string>
+                  });
+                }}
+                onInputChange={(event, newInputValue) => {
+                  const options = newInputValue.split(",");
+
+                  if (options.length > 1) {
+                    const mainArtists = release.mainArtists
+                                                .concat(options)
+                                                .map(x => x.trim())
+                                                .filter(Boolean)
+                    setRelease({...release, mainArtists});
+                  } else {
+                    setTypingArtist(newInputValue);
+                  }
+                }}
+                renderInput={params => (
+                  <TextField
+                    {...params}
+                    variant="outlined"
+                    fullWidth
+                    className={classes.textField}
+                    margin="normal"
+                    required
+                    label="Main Artists"
+                    placeholder="(separated by comma: , )"
+                  />
+                )}
               />
             </Grid>
             <Grid item xs={12} className="py-0">
-              <TextField
-                variant="outlined"
-                className={classes.textField}
-                margin="normal"
-                fullWidth
-                name="featurings"
-                label="Featurings"
-                id="featurings"
-                autoComplete="featurings"
-                onChange={(e) => setRelease({
-                  ...release, featurings: e.currentTarget.value!
-                })}
-                value={release.featurings}
-              />
+              <Autocomplete
+                  multiple
+                  freeSolo
+                  options={[]}
+                  value={release.featurings}
+                  inputValue={typingFeats}
+                  onChange={(event, newValue) => {
+                    setRelease({
+                      ...release, 
+                      featurings: newValue as Array<string>
+                    });
+                  }}
+                  onInputChange={(event, newInputValue) => {
+                    const options = newInputValue.split(",");
+
+                    if (options.length > 1) {
+                      const featurings = release.featurings 
+                                                  .concat(options)
+                                                  .map(x => x.trim())
+                                                  .filter(Boolean)
+                      setRelease({...release, featurings});
+                    } else {
+                      setTypingFeats(newInputValue);
+                    }
+                  }}
+                  renderInput={params => (
+                    <TextField
+                      {...params}
+                      variant="outlined"
+                      fullWidth
+                      className={classes.textField}
+                      margin="normal"
+
+                      label="Featurings"
+                      placeholder="(separated by comma: , )"
+                    />
+                  )}
+                />
             </Grid>
             <Grid item xs={12} className="py-0">
               <TextField

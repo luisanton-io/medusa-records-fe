@@ -49,16 +49,17 @@ export const API = {
                 credentials: "include"
             }
         )
-    },
-    uploadImage: (file: File) => {
-        const formData = new FormData()
-        formData.append('image', file)
-
-        return fetch(endpoint.upload, {
-            method: "POST",
-            headers: { "Content-Type": "multipart/form-data" },
-            body: formData            
-        })
     }
+    // ,
+    // uploadImage: (file: File) => {
+    //     const formData = new FormData()
+    //     formData.append('image', file)
+
+    //     return fetch(endpoint.upload, {
+    //         method: "POST",
+    //         headers: { "Content-Type": "multipart/form-data" },
+    //         body: formData            
+    //     })
+    // }
 }
 
