@@ -6,7 +6,6 @@ import { Genre } from '../../models/Genre';
 import { Copyright } from './Login'
 
 import DateFnsUtils from '@date-io/date-fns';
-import uniqid from 'uniqid'
 
 import {
   Box,
@@ -278,13 +277,14 @@ export default function Submit() {
                 renderInput={params => (
                   <TextField
                     {...params}
+                    InputLabelProps={{ required: true }}
                     variant="outlined"
                     fullWidth
                     className={classes.textField}
                     margin="normal"
-                    required
+                    required={release.mainArtists.length === 0}
                     label="Main Artists"
-                    placeholder="(separated by comma: , )"
+                    placeholder={ release.mainArtists.length === 0 ? '(separated by comma: , )' : ''}
                   />
                 )}
               />
@@ -322,9 +322,8 @@ export default function Submit() {
                       fullWidth
                       className={classes.textField}
                       margin="normal"
-
                       label="Featurings"
-                      placeholder="(separated by comma: , )"
+                      placeholder= {release.featurings.length === 0 ? '(separated by comma: , )' : ''}
                     />
                   )}
                 />
