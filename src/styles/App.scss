@@ -38,9 +38,9 @@
 }
 
 body {
-    background-color: #424242;
+    background-color: #2b2a2a;
     color: var(--frost);
-    font-family: 'Barlow', sans-serif;
+    font-family: 'Circular', 'Barlow', sans-serif;
     user-select: none;
     -webkit-user-select: none;
     -moz-user-select: none;
@@ -56,6 +56,15 @@ a:hover {
     text-decoration: none;
     transition: all 0.2s ease-in-out;
 }
+
+no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */  
+    &::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+}
+  
 
 .image-bg {
     z-index: -1;
