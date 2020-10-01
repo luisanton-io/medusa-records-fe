@@ -24,7 +24,9 @@ export const API = {
         )
     },
     releases: {
-        get: () => fetch(endpoint.releases),
+        get: (status?: string) => fetch(
+            `${endpoint.releases}${ status ? `?status=${status}` : '' }`
+        ),
         post: (data: ReleaseData) => fetch(
             endpoint.releases, 
             {
@@ -50,16 +52,5 @@ export const API = {
             }
         )
     }
-    // ,
-    // uploadImage: (file: File) => {
-    //     const formData = new FormData()
-    //     formData.append('image', file)
-
-    //     return fetch(endpoint.upload, {
-    //         method: "POST",
-    //         headers: { "Content-Type": "multipart/form-data" },
-    //         body: formData            
-    //     })
-    // }
 }
 
