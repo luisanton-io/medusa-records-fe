@@ -1,73 +1,65 @@
 import React, { Component } from 'react'
 import { Button, FormCheck } from 'react-bootstrap'
-import { Done as AcceptIcon, Clear as RejectIcon, SettingsBackupRestore as RestoreIcon } from '@material-ui/icons';
+import { 
+    Done as AcceptIcon, 
+    Clear as RejectIcon, 
+    SettingsBackupRestore as RestoreIcon 
+} from '@material-ui/icons'
 import uniqid from 'uniqid'
 
 import styles from '../pages/private/submissions/index.module.scss';
 
-import { ReleaseStatus, ReleaseStatusString } from '../models/ReleaseStatus';
+// import { ReleaseStatus, ReleaseStatusString } from '../models/ReleaseStatus';
+// import { ReleaseData } from '../models/Release';
 
 interface ControlProps {
-    status: ReleaseStatusString
+    releaseId: string
 }
 
 const className = styles['release-row-controls']
 
-export default function Controls (props: {status: ReleaseStatusString}) {
-
-    switch (ReleaseStatus[props.status]) {
-        case ReleaseStatus.rejected: return <RejectCtrls />
-        case ReleaseStatus.pending:  return <PendingCtrls />
-        case ReleaseStatus.accepted: return <AcceptedCtrls />
-    }
-
+interface RejectCtrlsProps extends ControlProps {
+    openModal: () => void
+    restore: (releaseId: string) => void
+    rejectNow: (releaseId: string) => void
 }
 
-export class RejectCtrls extends Component {
-
-    restore = () => {
-        console.log("Restoring release")
-    }
-    
-    rejectNow = () => {
-        console.log("Reject now!")
-    }
-    
-    render() {        
+export class RejectCtrls extends Component<RejectCtrlsProps, {}> {
+    render() { 
+        const { restore, rejectNow, releaseId } = this.props
         return <div className={ className }>
-            <Button variant="outline-warning" className="mr-2 rounded-pill" onClick={this.restore}>
+            <Button variant="outline-warning" className="mr-2 rounded-pill" onClick={() => restore(releaseId)}>
                 <RestoreIcon className="mr-2" />Restore as pending
             </Button>
-            <Button variant="outline-danger" className="rounded-pill" onClick={this.rejectNow}>
+            <Button variant="outline-danger" className="rounded-pill" onClick={() => rejectNow(releaseId)}>
                 <RejectIcon className="mr-2" />Reject now
             </Button>
         </div> 
     }
 }
 
-export class PendingCtrls extends Component {
-    
-    accept = () => {
-        console.log("accepting release")
-    }
-    
-    reject = () => {
-        console.log("rejecting release")
-    }
+interface PendingCtrlsProps extends ControlProps {
+    openModal: () => void
+    accept: (releaseId: string) => void
+    reject: (releaseId: string) => void
+}
+
+export class PendingCtrls extends Component<PendingCtrlsProps, {}> {
 
     render () {
+        let { accept, reject, releaseId } = this.props
         return <div className={ className }>
-            <Button variant="outline-success" className="mr-2 rounded-pill" onClick={this.accept}>
+            <Button variant="outline-success" className="mr-2 rounded-pill" onClick={() => accept(releaseId)}>
                 <AcceptIcon />
             </Button>
-            <Button variant="outline-danger" className="rounded-pill" onClick={this.reject}>
+            <Button variant="outline-danger" className="rounded-pill" onClick={() => reject(releaseId)}>
                 <RejectIcon />
             </Button>
         </div> 
     }
 }
 
-export class AcceptedCtrls extends Component {
+export class AcceptedCtrls extends Component<ControlProps, {}> {
 
     displaySwitch = () => {
         console.log("Showing/hiding on home")
