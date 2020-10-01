@@ -1,6 +1,7 @@
 import { Genre } from "./Genre";
 
 export interface ReleaseData {
+    _id?: string,
     firstName: string,
     lastName: string, 
     email: string,
@@ -22,5 +23,5 @@ export const emptyRelease: ReleaseData = {
     featurings: [],
     title: "",
     date: new Date(),
-    audioURL: "",
+    audioURL: ""
 }
