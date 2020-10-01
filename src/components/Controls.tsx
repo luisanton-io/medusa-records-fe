@@ -59,7 +59,6 @@ export class PendingCtrls extends Component {
         return <div className={ className }>
             <Button variant="outline-success" className="mr-2 rounded-pill" onClick={this.accept}>
                 <AcceptIcon />
-                {/* <span className={styles["control-name"]}>Accept release</span> */}
             </Button>
             <Button variant="outline-danger" className="rounded-pill" onClick={this.reject}>
                 <RejectIcon />
