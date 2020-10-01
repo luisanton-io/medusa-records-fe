@@ -1,5 +1,6 @@
 import { Credentials } from "../models/Credentials";
 import { ReleaseData } from "../models/Release";
+import { ReleaseStatus } from "../models/ReleaseStatus";
 
 const endpoint = {
     login:    process.env.REACT_APP_ENDPOINT_ROOT + "/login",
@@ -35,8 +36,8 @@ export const API = {
                 body: JSON.stringify(data)
             }
         ),
-        put: (data: ReleaseData) => fetch(
-            endpoint.releases, 
+        put: (releaseId: string, data: {status: ReleaseStatus} | {date: Date}) => fetch(
+            `${endpoint.releases}/${releaseId}`, 
             {
                 method: "PUT",
                 headers: jsonHeaders,
