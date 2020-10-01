@@ -81,7 +81,7 @@ export default function Submit() {
     // invalidEvent.preventDefault()
     setAlert({
       display: true,
-      message: "Fill in all required fields",
+      message: "Fill in all required fields and add a cover for your release.",
       severity: "error"
     })
   }
@@ -95,7 +95,7 @@ export default function Submit() {
     
     setAlert({
       display: true,
-      message: message,
+      message: JSON.stringify(message),
       severity: response.status === 201 ? "success" : "error"
     })
   }
@@ -284,7 +284,7 @@ export default function Submit() {
                     margin="normal"
                     required={release.mainArtists.length === 0}
                     label="Main Artists"
-                    placeholder={ release.mainArtists.length === 0 ? '(separated by comma: , )' : ''}
+                    placeholder={ release.mainArtists.length === 0 ? '(confirm with comma: , )' : ''}
                   />
                 )}
               />
@@ -323,7 +323,7 @@ export default function Submit() {
                       className={classes.textField}
                       margin="normal"
                       label="Featurings"
-                      placeholder= {release.featurings.length === 0 ? '(separated by comma: , )' : ''}
+                      placeholder= {release.featurings.length === 0 ? '(confirm with comma: , )' : ''}
                     />
                   )}
                 />
@@ -417,6 +417,7 @@ export default function Submit() {
                 className="no-dimensions"
                 onClick={() => { if (alert.display) setAlert({ ...alert, display: false }) }}
                 onChange={didSelectFile}
+                required
               />
               <label
                 className={classes.textField + " w-100 h-100 d-flex cursor-pointer file-picker"}
