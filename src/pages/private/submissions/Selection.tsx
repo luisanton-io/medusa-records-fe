@@ -6,7 +6,7 @@ import styles from './Selection.module.css'
 import { Warning, CheckCircle, Cancel } from '@material-ui/icons';
 
 export default function SelectSubsList() {
-    const currentPath = window.location.pathname
+    // const currentPath = window.location.pathname
     const selectionButton = styles["selection-button"] + " "
 
     // console.log(styles)

@@ -5,78 +5,66 @@ import { PlayCircleOutlineOutlined as PlayIcon } from '@material-ui/icons';
 import uniqid from 'uniqid'
 import styles from './index.module.scss'
 import Player from '../../../components/Player';
+import Controls from '../../../components/Controls';
+import { ReleaseStatusString } from '../../../models/ReleaseStatus';
 
 export default class Submissions extends React.Component<RouteComponentProps, {}> {
     render() {
-        const listName = String(this.props.history.location.pathname).split("/").pop()!
+        const status = String(this.props.history.location.pathname).split("/").pop()!
 
         let list = []
-        for (let i=0; i<=43; i++) {
+        for (let i = 0; i <= 43; i++) {
             list.push({
-                title: i +" Test release",
+                title: i + " Test release",
                 mainArtists: ["Lou Wyss"],
-                status: "pending"
+                status
             })
         }
-        // return <div>I am Submissions: { listName }</div>
-        return <>
-            {/* <div className="d-flex flex-column no-scrollbar" style={{maxHeight: "100vh", width: "100vw"}}>  */}
-
+        return (
             <Grid container className="flex-column no-scrollbar flex-nowrap" style={{
-                // overflowY: "scroll",
-                maxHeight: "100vh", width: "100vw"
-                }}>
+                maxHeight: "100vh",
+                width: "100vw"
+            }}>
                 <Grid item xs={10} className="d-flex mx-auto">
                     <Typography component="h1" variant="h5" className="my-5" style={{
                         fontWeight: 800,
                         fontFamily: "Circular"
                     }}>
-                        { listName[0].toUpperCase() + listName.slice(1) + " releases" }.
+                        {status[0].toUpperCase() + status.slice(1) + " releases"}.
                     </Typography>
                 </Grid>
-                
-                <Grid item xs={12} className="w-100" style={{
-                    overflowY: "scroll"
-                    }}>
-                    <Grid item xs={10} className="mx-auto">
-                    
-                    <TableContainer className="bg-transparent" >
-                        <Table stickyHeader>
-                        <TableHead 
-                            // className="position-absolute w-100"
-                            >
+
+                <TableContainer className="bg-transparent px-md-5 mx-auto" >
+                    <Table stickyHeader>
+                        <TableHead>
                             <TableRow>
                                 <TableCell colSpan={2}>Title</TableCell>
-                                <TableCell>Artists</TableCell>
-                                <TableCell>Status</TableCell>
+                                <TableCell colSpan={2}>Artists</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
                             {
-                                list.map( (el) => <TableRow className={styles["playlist-row"]} key={uniqid()}>
-                                        <TableCell style={{width: "15px"}}>
-                                            <PlayIcon className={styles["play-icon"]} />
+                                list.map(el => (
+                                    <TableRow className={styles["playlist-row"]} key={uniqid()}>
+                                        <TableCell style={{ width: "15px" }}>
+                                            <PlayIcon className={styles["play-icon"]} onClick={ () => {console.log("playing...")}}/>
                                         </TableCell>
                                         <TableCell>
-                                            { el.title }
+                                            {el.title}
                                         </TableCell>
                                         <TableCell>
-                                            { el.mainArtists[0] }
+                                            {el.mainArtists[0]}
                                         </TableCell>
                                         <TableCell>
-                                            { el.status }
+                                            <Controls status={status as ReleaseStatusString} />
                                         </TableCell>
                                     </TableRow>
-                                )  
+                                ))
                             }
                         </TableBody>
-                        </Table>
-                    </TableContainer>
-                    </Grid>
-                </Grid>
+                    </Table>
+                </TableContainer>
                 <Player />
-            </Grid>
-        {/* </div> */}
-        </>
+            </Grid>)
     }
 }
