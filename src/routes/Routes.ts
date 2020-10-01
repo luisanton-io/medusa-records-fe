@@ -8,9 +8,9 @@ import NotFound from '../pages/NotFound'
 
 class SubmissionsRoutes { 
     selectList = "/submissions"
-    pending    = this.selectList + "/pending"
-    accepted   = this.selectList + "/accepted"
-    rejected   = this.selectList + "/rejected"
+    pending    = `${this.selectList}/pending`
+    accepted   = `${this.selectList}/accepted`
+    rejected   = `${this.selectList}/rejected`
 }
 
 export class Routes {
