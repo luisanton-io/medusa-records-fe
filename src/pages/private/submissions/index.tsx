@@ -7,10 +7,32 @@ import styles from './index.module.scss'
 import Player from '../../../components/Player';
 import Controls from '../../../components/Controls';
 import { ReleaseStatusString } from '../../../models/ReleaseStatus';
+import { ReleaseData } from '../../../models/Release';
+import { API } from '../../../routes/API';
 
-export default class Submissions extends React.Component<RouteComponentProps, {}> {
+interface SubmissionsState {
+    status: ReleaseStatusString
+    currentList: ReleaseData[]
+}
+
+export default class Submissions extends React.Component<RouteComponentProps, SubmissionsState> {
+
+    state = {
+        status: String(this.props.history.location.pathname).split("/").pop()! as ReleaseStatusString,
+        currentList: []
+    }
+
+    play = (release: any) =>{ // TEMP
+    // play = (release: ReleaseData) =>{
+        console.log("playing " + release.title)
+    }
+
+    componentDidMount = () => {
+        let response = API.releases.get()
+    }
+
     render() {
-        const status = String(this.props.history.location.pathname).split("/").pop()!
+        const status = this.state.status
 
         let list = []
         for (let i = 0; i <= 43; i++) {
@@ -44,16 +66,18 @@ export default class Submissions extends React.Component<RouteComponentProps, {}
                         </TableHead>
                         <TableBody>
                             {
-                                list.map(el => (
+                                list.map(release => (
                                     <TableRow className={styles["playlist-row"]} key={uniqid()}>
                                         <TableCell style={{ width: "15px" }}>
-                                            <PlayIcon className={styles["play-icon"]} onClick={ () => {console.log("playing...")}}/>
+                                            <PlayIcon className={styles["play-icon"]} onClick={() => this.play(release)} />
                                         </TableCell>
                                         <TableCell>
-                                            {el.title}
+                                            {release.title}
                                         </TableCell>
                                         <TableCell>
-                                            {el.mainArtists[0]}
+                                            {
+                                                release.mainArtists.join(', ')
+                                            }
                                         </TableCell>
                                         <TableCell>
                                             <Controls status={status as ReleaseStatusString} />
