@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { emptyRelease } from '../../models/Release'
 import { Genre } from '../../models/Genre';
 import { Copyright } from './Login'
+import { API } from '../../routes/API';
 
 import DateFnsUtils from '@date-io/date-fns';
 
@@ -29,7 +30,7 @@ import {
 import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import MuiAlert, { Color } from "@material-ui/lab/Alert";
-import { API } from '../../routes/API';
+import { audioSrc } from '../../utilities/audioSrc';
 //#endregion
 
 //#region Styles
@@ -401,12 +402,48 @@ export default function Submit() {
                 label="Audio URL"
                 id="audioURL"
                 autoComplete="audio-url"
-                onChange={(e) => setRelease({
-                  ...release,
-                  audioURL: e.currentTarget.value!
-                })}
-                value={release.audioURL}
+                onFocus={(e) => {e.preventDefault(); e.target.select()}}
+                onKeyDown={(e) => {
+                  // console.log(e.ctrlKey)
+                  if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
+                    console.log("pasting")
+                  } else if (e.key === 'Backspace' || e.key === 'Delete') {
+                    (e.target as HTMLInputElement).value = ''
+                    setRelease({...release, audioURL: ''})
+                  } else if (!((e.ctrlKey || e.metaKey) && e.key === 'v')) {
+                    e.preventDefault()
+                    console.log(e.key)
+                  }
+                }}
+                onChange={(e) => {
+                  const inputURL = e.currentTarget.value!
+                  e.currentTarget.select()
+
+                  if (inputURL.length > 0) try {
+                    const audioURL = audioSrc(inputURL)
+                    setRelease({...release, audioURL})
+                  } catch (error) {
+                    setRelease({...release, audioURL: ''})
+                    setAlert({
+                      display: true, 
+                      message: error.message,
+                      severity: "error"
+                    })
+                  }
+                }}
+                // value={release.audioURL}
               />
+              {
+                release.audioURL.length > 0 &&
+                <div className="d-flex justify-content-between px-3">
+                <h5 className="my-auto">Preview:</h5>
+                <audio controls>
+                    <source
+                        src={release.audioURL}
+                        type="audio/x-wav" />
+                </audio>
+                </div>
+              }
             </Grid>
             <Grid item xs={12} className="pt-0 d-flex flex-column">
               <InputLabel id="select-file-label">Upload cover image:</InputLabel>
