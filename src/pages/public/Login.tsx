@@ -10,6 +10,7 @@ import Container from '@material-ui/core/Container';
 import WarningIcon from '@material-ui/icons/Warning';
 import { API } from '../../routes/API';
 import { withRouter } from 'react-router-dom';
+import { Routes } from '../../routes/Routes';
 
 export function Copyright() {
   return (
@@ -58,7 +59,7 @@ export default withRouter(function SignIn() {
     submitEvent.preventDefault()
     let response = await API.login(credentials)
 
-    if (response.status === 200) console.log("logged in!")
+    if (response.status === 200) window.location.pathname = Routes.private.submissions.selectList
   }
 
   return (
