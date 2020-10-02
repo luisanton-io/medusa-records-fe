@@ -4,6 +4,37 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import fetchIntercept from 'fetch-intercept';
+import { Routes } from './routes/Routes';
+
+// const unregister = 
+fetchIntercept.register({
+    request: function (url, config) {
+        // Modify the url or config here
+        return [url, config];
+    },
+
+    requestError: function (error) {
+        // Called when an error occured during another 'request' interceptor call
+        return Promise.reject(error);
+    },
+
+    response: function (response) {
+        // Modify the reponse object
+        console.log(response.status)
+
+        if (response.status === 401) {
+          window.location.pathname = Routes.public.login
+        }
+        return response;
+    },
+
+    responseError: function (error) {
+        // Handle an fetch error
+        console.log(error)
+        return Promise.reject(error);
+    }
+});
 
 ReactDOM.render(
   // <React.StrictMode>
