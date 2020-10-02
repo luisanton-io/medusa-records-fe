@@ -3,9 +3,9 @@ import { ReleaseData } from "../models/Release";
 import { ReleaseStatus } from "../models/ReleaseStatus";
 
 const endpoint = {
-    login:    process.env.REACT_APP_ENDPOINT_ROOT + "/login",
+    login: process.env.REACT_APP_ENDPOINT_ROOT + "/login",
     releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
-    upload:   process.env.REACT_APP_ENDPOINT_ROOT + "/upload"
+    checkAuth: process.env.REACT_APP_ENDPOINT_ROOT + "/checkAuth",
 }
 
 const jsonHeaders = new Headers({ 
@@ -25,8 +25,12 @@ export const API = {
         )
     },
     releases: {
-        get: (status?: string) => fetch(
-            `${endpoint.releases}${ status ? `?status=${status}` : '' }`
+        get: (status: string) => fetch(
+            `${endpoint.releases}/${ status }`,
+            {
+                method: "GET",
+                credentials: "include"
+            }
         ),
         post: (data: ReleaseData) => fetch(
             endpoint.releases, 
@@ -52,6 +56,10 @@ export const API = {
                 credentials: "include"
             }
         )
-    }
+    },
+    checkAuth: () => fetch(endpoint.checkAuth, {
+        method: "GET",
+        credentials: "include"
+    })
 }
 
