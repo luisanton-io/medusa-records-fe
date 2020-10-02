@@ -29,7 +29,7 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
         releases: [] as ReleaseData[]
     }
 
-    play = (release: any) =>{ // TEMP
+    play = (release: any) => { // TEMP
     // play = (release: ReleaseData) =>{
         console.log("playing " + release.title)
     }
@@ -53,6 +53,7 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
         this.setState({displayModal: false})
     }
 
+    //
     acceptRelease = async (id: string) => {
         const response = await API.releases.put(id, { status: ReleaseStatus.accepted })
 
@@ -88,31 +89,25 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
             this.getReleases()
         }
     }
+    //
 
     render() {
         const status = this.state.status
         const self = this
-        // let list = []
-        // for (let i = 0; i <= 43; i++) {
-        //     list.push({
-        //         title: i + " Test release",
-        //         mainArtists: ["Lou Wyss"],
-        //         status
-        //     })
-        // }
+        
         return (<>
             <Modal show={this.state.displayModal} onHide={this.closeModal}>
                 <Modal.Header closeButton>
-                <Modal.Title>Modal heading</Modal.Title>
+                    <Modal.Title>Modal heading</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
                 <Modal.Footer>
-                <Button variant="secondary" onClick={this.closeModal}>
-                    Close
-                </Button>
-                <Button variant="primary" onClick={this.closeModal}>
-                    Save Changes
-                </Button>
+                    <Button variant="secondary" onClick={this.closeModal}>
+                        Close
+                    </Button>
+                    <Button variant="primary" onClick={this.closeModal}>
+                        Save Changes
+                    </Button>
                 </Modal.Footer>
             </Modal>
 
@@ -145,9 +140,8 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
                             {
                                 this.state.releases.length > 0 &&
                                 this.state.releases.map(release => {
-
-                                    const controls = (function (status) {
-                                        switch (status) {
+                                    const controls = (function () {
+                                        switch (ReleaseStatus[status]) {
                                             case ReleaseStatus.rejected: 
                                                 return <RejectCtrls
                                                     releaseId={release._id!} 
@@ -167,12 +161,15 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
                                                     releaseId={release._id!} 
                                                     />
                                         }
-                                    })(ReleaseStatus[status])
+                                    })()
 
                                     return (
                                     <TableRow className={styles["playlist-row"]} key={uniqid()}>
                                         <TableCell style={{ width: "15px" }}>
-                                            <PlayIcon className={styles["play-icon"]} onClick={() => this.play(release)} />
+                                            <PlayIcon 
+                                                className={styles["play-icon"]} 
+                                                onClick={() => this.play(release)} 
+                                                />
                                         </TableCell>
                                         <TableCell>
                                             { release.title }
