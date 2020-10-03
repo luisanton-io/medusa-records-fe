@@ -6,11 +6,15 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import fetchIntercept from 'fetch-intercept';
 import { Routes } from './routes/Routes';
+import { API } from './routes/API';
+
+let latestRequest: {url: string, config: any} = {url: '', config: {}}
 
 // const unregister = 
 fetchIntercept.register({
     request: function (url, config) {
         // Modify the url or config here
+        latestRequest = { url, config }
         return [url, config];
     },
 
@@ -20,8 +24,13 @@ fetchIntercept.register({
     },
 
     response: function (response) {
-        // Modify the reponse object
-        console.log(response.status)
+        if (response.status === 403) {
+          (async () => await API.refreshToken())()
+        }
+
+        if (response.status === 222) {
+          (async () => await fetch(latestRequest.url, latestRequest.config))()
+        }
 
         if (response.status === 401) {
           window.location.pathname = Routes.public.login
@@ -32,6 +41,7 @@ fetchIntercept.register({
     responseError: function (error) {
         // Handle an fetch error
         console.log(error)
+        console.log("ciao")
         return Promise.reject(error);
     }
 });
