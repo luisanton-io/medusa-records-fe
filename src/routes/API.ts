@@ -6,6 +6,7 @@ const endpoint = {
     login: process.env.REACT_APP_ENDPOINT_ROOT + "/login",
     releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
     checkAuth: process.env.REACT_APP_ENDPOINT_ROOT + "/checkAuth",
+    refreshToken: process.env.REACT_APP_ENDPOINT_ROOT + "/login/refreshToken",
 }
 
 const jsonHeaders = new Headers({ 
@@ -59,6 +60,10 @@ export const API = {
     },
     checkAuth: () => fetch(endpoint.checkAuth, {
         method: "GET",
+        credentials: "include"
+    }),
+    refreshToken: () => fetch(endpoint.refreshToken, {
+        method: "POST",
         credentials: "include"
     })
 }
