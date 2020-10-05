@@ -1,0 +1,145 @@
+#player-footer {
+
+    $theme-tint: #fbc02d;
+
+    #player-section a:hover {
+        color: white;
+    }
+    
+    #track-current-time,
+    #track-duration {
+        /* padding-left: 5%;
+        padding-right: 5%; */
+        min-width: 40px;
+        box-sizing: content-box;
+        padding-left: 2%;
+        padding-right: 2%;
+    }
+    
+    #title-display {
+        position: absolute;
+    }
+    
+    #track-artist a {
+        color: rgb(180, 179, 179);
+    }
+    
+    @media (max-width: 768px) {
+    
+        #title-display {
+            position: static;
+            width: 100%;
+        } 
+        
+        #track-artist a {
+            color: #fff;
+        }
+        
+        #track-title {
+            display: inline;
+            font-size: 1rem;
+            opacity: 0;
+        }
+    
+        #track-artist {
+            font-size: 1rem;
+            opacity: 0;
+        }
+    
+        #track-artist::before {
+            content: "· ";
+            opacity: 1;
+        }
+    
+        #track-current-time,
+        #track-duration {
+            display: none;
+        }
+    
+        #progress-bar {
+            height: 3px;
+            margin-bottom: 3px;
+            width: 100vw;
+            opacity: 0.7;
+            position: absolute;
+            top: -10px;
+            left: 0px;
+        }
+    }
+    
+    #player-controls-wrapper {
+        margin-left: auto;
+        margin-right: auto;
+    }
+    
+    @media (max-width: 768px) {
+        #player-controls-wrapper {
+            width: 100%
+        }   
+    }
+    
+    #player-controls {
+        width: 75%
+    }   
+    
+    @media (max-width: 768px) {
+        #player-controls {
+            width: 100%
+        }   
+    }
+    
+    #player-controls svg {
+        cursor: pointer;
+        // font-size: 0.9rem;
+        opacity: 0.85;
+        transition: all 0.1s ease-in-out;
+    }
+    
+    #player-controls label > svg {
+        font-size: 1.3rem;
+    }
+    
+    #player-controls svg:hover {
+        opacity: 1;
+        transform: scale(1.05);
+        filter: drop-shadow(0 0 0.75rem $theme-tint);
+        fill: lighten($color: $theme-tint, $amount: 20);
+    }
+    
+    progress {
+        width: 30vw;
+    }
+    
+    progress[value] {
+        -webkit-appearance: none;
+        appearance: none;
+        background-color: white;
+        color: lighten($color: $theme-tint, $amount: 20);
+        height: 5px;
+    }
+      
+    progress[value]::-webkit-progress-bar {
+        background-color: white;
+        border-radius: 2px;
+        border: 1px solid lighten(#acacac, 20%);
+        color: lighten($color: $theme-tint, $amount: 20);
+    }
+    
+    progress::-webkit-progress-value {
+        background-color: lighten($color: $theme-tint, $amount: 20);
+    }
+    
+    .control-toggled {
+        filter: drop-shadow(0 0 0.75rem $theme-tint);
+        color: $theme-tint;
+    }
+    
+    #volume-bar {
+        border-radius: 8px;
+        height: 4px;
+        width: 90px;
+        outline: none;
+        // transition: background 450ms ease-in;
+        -webkit-appearance: none;
+    }
+}
