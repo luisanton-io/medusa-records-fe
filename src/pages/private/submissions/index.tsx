@@ -14,6 +14,7 @@ import { ReleaseData } from '../../../models/Release';
 import { API } from '../../../routes/API';
 
 import styles from './index.module.scss'
+// import styles from '../styles/Submissions.module.scss'
 
 interface SubmissionsState {
     status: ReleaseStatusString
@@ -92,7 +93,7 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
     //
 
     render() {
-        const status = this.state.status
+        const {status, releases} = this.state
         const self = this
         
         return (<>
@@ -138,8 +139,8 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
                         </TableHead>
                         <TableBody>
                             {
-                                this.state.releases.length > 0 &&
-                                this.state.releases.map(release => {
+                                releases.length > 0 &&
+                                releases.map(release => {
                                     const controls = (function () {
                                         switch (ReleaseStatus[status]) {
                                             case ReleaseStatus.rejected: 
