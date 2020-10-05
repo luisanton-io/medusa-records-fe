@@ -5,17 +5,6 @@
 .release-row-controls {
     display: flex;
     justify-content: flex-end;
-
-    // .control-name {
-    //     visibility: hidden;
-    // }
-
-    // &:hover button:hover {
-    //     max-width: unset;
-    //     .control-name {
-    //         visibility: visible;
-    //     }
-    // }
 }
 
 .playlist-row {
@@ -25,11 +14,9 @@
 
     &:hover {
         background-color: rgba(0,0,0,0.3);
-        // td:last-of-type {
         .release-row-controls {
             visibility: visible;
         }
-        // }
         td:first-of-type {
             .play-icon {
                 visibility: visible;
