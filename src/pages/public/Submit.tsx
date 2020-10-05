@@ -19,7 +19,6 @@ import {
   makeStyles,
   MenuItem,
   Select,
-  Snackbar,
   TextField,
   Typography
 } from '@material-ui/core'
@@ -29,8 +28,8 @@ import {
 } from '@material-ui/pickers'
 import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
-import MuiAlert, { Color } from "@material-ui/lab/Alert";
 import { audioSrc } from '../../utilities/audioSrc';
+import { useToast } from '../../models/Toast/hook';
 //#endregion
 
 //#region Styles
@@ -71,16 +70,11 @@ export default function Submit() {
   const [release, setRelease] = useState(emptyRelease)
   const [typingArtist, setTypingArtist] = useState("")
   const [typingFeats, setTypingFeats] = useState("")
-
-  const [alert, setAlert] = useState({
-    display: false,
-    message: "",
-    severity: "error" as Color
-  })
+  const { toast, setToast } = useToast()
 
   const alertInvalid = (invalidEvent: React.SyntheticEvent) => {
     // invalidEvent.preventDefault()
-    setAlert({
+    setToast({
       display: true,
       message: "Fill in all required fields and add a cover for your release.",
       severity: "error"
@@ -94,7 +88,7 @@ export default function Submit() {
     const response = await API.releases.post(release)
     const { message } = await response.json()
     
-    setAlert({
+    setToast({
       display: true,
       message: JSON.stringify(message),
       severity: response.status === 201 ? "success" : "error"
@@ -111,7 +105,7 @@ export default function Submit() {
 
     if (!file) return 
     else if (file.size > 7340032) {
-      setAlert({
+      setToast({
         display: true,
         message: "Max size allowed: 7 MB.",
         severity: "error"
@@ -124,7 +118,7 @@ export default function Submit() {
       const fileExt = file.name.split('.').pop()?.toLowerCase()
 
       if (!fileExt || !['jpg', 'png'].includes(fileExt)) {
-        setAlert({
+        setToast({
           display: true,
           message: "Unsupported file type!",
           severity: "error"
@@ -137,7 +131,7 @@ export default function Submit() {
 
       img.onload = function () {
         if (img.naturalHeight !== 3000 || img.naturalWidth !== 3000) {
-          setAlert({
+          setToast({
             display: true,
             message: "Cover image must be exactly 3000x3000.",
             severity: "error"
@@ -160,23 +154,10 @@ export default function Submit() {
   
   }
 
-  const handleClose = (event?: React.SyntheticEvent, reason?: string) => {
-    if (reason !== "clickaway") setAlert({ ...alert, display: false });
-  };
+  
 
   return (
     <Container component="main" maxWidth="sm" className="my-auto">
-      <Snackbar open={alert.display} 
-      autoHideDuration={6000} onClose={handleClose}>
-        <MuiAlert
-          elevation={6}
-          variant="filled"
-          onClose={handleClose}
-          severity={alert.severity}
-        >
-          {alert.message}
-        </MuiAlert>
-      </Snackbar>
       <CssBaseline />
       <img
         alt="..."
@@ -424,7 +405,7 @@ export default function Submit() {
                     setRelease({...release, audioURL})
                   } catch (error) {
                     setRelease({...release, audioURL: ''})
-                    setAlert({
+                    setToast({
                       display: true, 
                       message: error.message,
                       severity: "error"
@@ -452,7 +433,10 @@ export default function Submit() {
                 id="outlined-button-file"
                 type="file"
                 className="no-dimensions"
-                onClick={() => { if (alert.display) setAlert({ ...alert, display: false }) }}
+                onClick={() => { 
+                  // const toast = ToastComponent.shared.toast.value
+                  if (toast.display) setToast({ ...toast, display: false }) 
+                }}
                 onChange={didSelectFile}
                 required
               />
