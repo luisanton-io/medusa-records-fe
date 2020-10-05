@@ -1,9 +1,9 @@
+// Assets
 @import url('https://fonts.googleapis.com/css2?family=Barlow:wght@200;400;500;700&display=swap');
 
 @font-face {
     font-family: "Circular";
     src: url(/assets/fonts/lineto-circular-pro-book.ttf);
-
 }
 
 @font-face {
@@ -24,18 +24,22 @@
     font-weight: 800;
 }
 
-#root {
-    min-height: 100vh;
-    display: flex;
-    position: relative;
-    overflow: hidden;
-}
+$theme-tint: #fbc02d;
+$theme-tint-lighter: lighten($color: $theme-tint, $amount: 20);
 
 :root {
     --frost: #fcfcff;
     --link: #b8b8b8;
     --link-hover: rgb(255, 235, 59);
-    --theme-tint: #fbc02d;
+    --theme-tint: $theme-tint;
+    --theme-tint-light: $theme-tint-light;
+}
+
+#root {
+    min-height: 100vh;
+    display: flex;
+    position: relative;
+    overflow: hidden;
 }
 
 body {
@@ -65,15 +69,6 @@ a:hover {
         display: none; /* Chrome, Safari and Opera */
     }
 }
-  
-// .loading-logo {
-//     animation: deblur 1s;
-// }
-
-// @keyframes deblur {
-//    0% {filter: blur(40px) ;} 
-//    100% {filter: blur(0px) ;} 
-// }
 
 .image-bg {
     z-index: -1;
