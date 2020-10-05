@@ -6,6 +6,7 @@ import './styles/App.scss'
 import { ThemeProvider } from '@material-ui/core';
 import { createMuiTheme } from '@material-ui/core';
 import { yellow } from '@material-ui/core/colors';
+import Toaster from './components/Toaster';
 
 export const theme = createMuiTheme({
   palette: {
@@ -33,6 +34,7 @@ export const theme = createMuiTheme({
 export default function App() {
   return (<BrowserRouter>
     <ThemeProvider theme={theme}>
+      <Toaster />
       <Switch>
         {
           routeProps.map( props => <Route key={ uniqid() } { ...props } /> )
