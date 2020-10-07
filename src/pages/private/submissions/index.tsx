@@ -14,25 +14,32 @@ import { ReleaseData } from '../../../models/Release';
 import { API } from '../../../routes/API';
 
 import styles from './index.module.scss'
+
+import AudioComponent from '../../../models/AudioComponent';
+import { State } from 'react-flux-component';
 // import styles from '../styles/Submissions.module.scss'
 
-interface SubmissionsState {
+interface SubmissionsState extends State {
     status: ReleaseStatusString
     displayModal: boolean
-    releases: ReleaseData[]
 }
 
-export default class Submissions extends React.Component<RouteComponentProps, SubmissionsState> {
+export default class Submissions extends AudioComponent<RouteComponentProps, SubmissionsState> {
 
-    state = {
+    state: SubmissionsState = {
+        ...this.state,
         status: String(this.props.history.location.pathname).split("/").pop()! as ReleaseStatusString,
-        displayModal: false,
-        releases: [] as ReleaseData[]
+        displayModal: false
     }
 
-    play = (release: any) => { // TEMP
+    releases = this.hardBind(AudioComponent.shared.playlist)    
+    nowPlaying = this.softBind(AudioComponent.shared.nowPlaying)
+
+    play = (index: number) => { // TEMP
     // play = (release: ReleaseData) =>{
-        console.log("playing " + release.title)
+        this.nowPlaying.value = index
+        const track = this.releases.value[index]
+        console.log("playing " + index + track.title + " at " + track.audioURL)
     }
 
     componentDidMount = () => {
@@ -43,7 +50,10 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
         const response = await API.releases.get(this.state.status)
         const releases = await response.json() as ReleaseData[]
 
-        this.setState({releases})
+        this.releases.value = releases
+        console.log(this.releases.value)
+        // this.setState({releases})
+
     }
 
     showModal = () => {
@@ -93,7 +103,9 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
     //
 
     render() {
-        const {status, releases} = this.state
+        const { status } = this.state
+        const releases = this.releases.value
+
         const self = this
         
         return (<>
@@ -140,7 +152,7 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
                         <TableBody>
                             {
                                 releases.length > 0 &&
-                                releases.map(release => {
+                                releases.map((release, index) => {
                                     const controls = (function () {
                                         switch (ReleaseStatus[status]) {
                                             case ReleaseStatus.rejected: 
@@ -169,7 +181,7 @@ export default class Submissions extends React.Component<RouteComponentProps, Su
                                         <TableCell style={{ width: "15px" }}>
                                             <PlayIcon 
                                                 className={styles["play-icon"]} 
-                                                onClick={() => this.play(release)} 
+                                                onClick={() => this.play(index)} 
                                                 />
                                         </TableCell>
                                         <TableCell>
