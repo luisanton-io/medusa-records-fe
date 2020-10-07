@@ -31,8 +31,8 @@ $theme-tint-lighter: lighten($color: $theme-tint, $amount: 20);
     --frost: #fcfcff;
     --link: #b8b8b8;
     --link-hover: rgb(255, 235, 59);
-    --theme-tint: $theme-tint;
-    --theme-tint-light: $theme-tint-light;
+    --theme-tint:  #fbc02d;
+    --theme-tint-light: #fcd778;
 }
 
 #root {
