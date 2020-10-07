@@ -2,11 +2,11 @@ import React, { useState, useEffect } from 'react'
 import { Button } from 'react-bootstrap'
 import { Grid, Typography } from '@material-ui/core'
 import { Link } from 'react-router-dom'
-import styles from './Selection.module.scss'
+import styles from './index.module.scss'
 // import styles from '../styles/Selection.module.scss'
 import { Warning, CheckCircle, Cancel } from '@material-ui/icons';
-import { API } from '../../../routes/API'
-import Loader from '../../../components/Loader'
+import { API } from '../../../../routes/API'
+import Loader from '../../../../components/Loader'
 
 export default function SelectSubsList() {
     // const currentPath = window.location.pathname
