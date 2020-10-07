@@ -30,6 +30,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { audioSrc } from '../../utilities/audioSrc';
 import { useToast } from '../../models/Toast/hook';
+// import ToastComponent from '../../models/Toast/component'
 //#endregion
 
 //#region Styles
@@ -70,7 +71,8 @@ export default function Submit() {
   const [release, setRelease] = useState(emptyRelease)
   const [typingArtist, setTypingArtist] = useState("")
   const [typingFeats, setTypingFeats] = useState("")
-  const { toast, setToast } = useToast()
+  const { getToast, setToast } = useToast()
+  const toast = getToast()
 
   const alertInvalid = (invalidEvent: React.SyntheticEvent) => {
     // invalidEvent.preventDefault()
@@ -83,8 +85,6 @@ export default function Submit() {
 
   const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
-    console.log("submitting...")
-    console.log(release)
     const response = await API.releases.post(release)
     const { message } = await response.json()
     
@@ -153,8 +153,6 @@ export default function Submit() {
     reader.readAsDataURL(file);
   
   }
-
-  
 
   return (
     <Container component="main" maxWidth="sm" className="my-auto">
@@ -385,16 +383,13 @@ export default function Submit() {
                 autoComplete="audio-url"
                 onFocus={(e) => {e.preventDefault(); e.target.select()}}
                 onKeyDown={(e) => {
-                  // console.log(e.ctrlKey)
                   if ((e.ctrlKey || e.metaKey) && e.key === 'v') {
-                    console.log("pasting")
+                    // console.log("pasting")
+                    return
                   } else if (e.key === 'Backspace' || e.key === 'Delete') {
                     (e.target as HTMLInputElement).value = ''
                     setRelease({...release, audioURL: ''})
-                  } else if (!((e.ctrlKey || e.metaKey) && e.key === 'v')) {
-                    e.preventDefault()
-                    console.log(e.key)
-                  }
+                  } else e.preventDefault()
                 }}
                 onChange={(e) => {
                   const inputURL = e.currentTarget.value!
@@ -434,7 +429,8 @@ export default function Submit() {
                 type="file"
                 className="no-dimensions"
                 onClick={() => { 
-                  // const toast = ToastComponent.shared.toast.value
+                  // const toast = getToast()
+                  console.log(toast)
                   if (toast.display) setToast({ ...toast, display: false }) 
                 }}
                 onChange={didSelectFile}
