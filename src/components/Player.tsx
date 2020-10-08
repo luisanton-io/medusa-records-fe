@@ -149,7 +149,9 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
             <Toolbar className="bg-transparent text-white px-0 neon-glow" id={`player-footer-${this.props.status}`}>
                 <audio src={onAir?.audioURL} ref={this.audioPlayer} 
                 onTimeUpdate={({currentTarget: player}) => this.currentTime.value = player.currentTime} 
-                onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} />  
+                onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} 
+                onEnded={this.forward}
+                />  
                 {
                     onAir ?
                     <div id="title-display" className="ml-3 my-1 text-white" style={{width: "auto"}}>

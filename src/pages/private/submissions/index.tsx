@@ -49,7 +49,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         const response = await API.releases.get(this.state.status)
         const releases = await response.json() as ReleaseData[]
 
-        this.releases.value = [...releases, ...releases, ...releases, ...releases]
+        this.releases.value = releases
         console.log(this.releases.value)
         // this.setState({releases})
 
