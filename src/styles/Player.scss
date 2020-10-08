@@ -1,164 +1,195 @@
 $theme-tint: #fbc02d;
 $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
 
-#player-footer {
-
-    @media (max-width: 768px) {
-        flex-direction: column;
-        padding-bottom: 1rem;
-    }
-
-
-    #player-section a:hover {
-        color: white;
-    }
+@mixin playerFooter($status) {
     
-    #track-current-time,
-    #track-duration {
-        /* padding-left: 5%;
-        padding-right: 5%; */
-        min-width: 40px;
-        box-sizing: content-box;
-        padding-left: 2%;
-        padding-right: 2%;
+    $neon-tint: transparent;     
+
+    @if $status == 'rejected' {
+        $neon-tint: #dc3545;
+    } @else if $status == 'accepted' {
+        $neon-tint: #28a745;
+    } @else if $status == 'pending' {
+        $neon-tint: $theme-tint;
     }
-    
-    #title-display {
-        position: absolute;
+
+    #player-footer-#{$status}.neon-glow {
+        border-top: 1px solid $neon-tint;
+        box-shadow: 0px 7px 23px 0px $neon-tint;
     }
-    
-    #track-artist {
-        font-size: 0.7rem;
-        font-weight: 400;
-        a {
-            color: rgb(180, 179, 179);
+
+    #player-footer-#{$status} {
+
+        @media (max-width: 768px) {
+            flex-direction: column;
+            padding-bottom: 1rem;
         }
-    }
-    
-    #track-title {
-        margin-bottom: 0px;
-        font-size: 0.9rem;
-        font-weight: 400;
-        letter-spacing: 0.7px;
-    }
-    
-    @media (max-width: 768px) {
-    
-        #title-display {
-            position: static;
-            width: 100%;
-        } 
+
+
+        #player-section a:hover {
+            color: white;
+        }
         
-        #track-artist a {
-            color: #fff;
+        #track-current-time,
+        #track-duration {
+            /* padding-left: 5%;
+            padding-right: 5%; */
+            min-width: 40px;
+            box-sizing: content-box;
+            padding-left: 2%;
+            padding-right: 2%;
+            font-size: 0.8rem;
+        }
+        
+        #title-display {
+            position: absolute;
+        }
+        
+        #track-artist {
+            font-size: 0.7rem;
+            font-weight: 400;
+            a {
+                color: rgb(180, 179, 179);
+            }
         }
         
         #track-title {
-            display: inline;
-            font-size: 1rem;
-            // opacity: 0;
+            margin-bottom: 0px;
+            font-size: 0.9rem;
+            font-weight: 400;
+            letter-spacing: 0.7px;
         }
-    
-        #track-artist {
-            font-size: 1rem;
-            // opacity: 0;
-        }
-    
-        #track-artist::before {
-            content: " · ";
-            opacity: 1;
-        }
-    
-        #track-current-time,
-        #track-duration {
-            display: none;
-        }
-    
+
         #progress-bar {
-            height: 3px;
-            margin-bottom: 3px;
-            width: 100vw;
-            opacity: 0.7;
-            position: absolute;
-            top: -10px;
-            left: 0px;
+            vertical-align: middle;
         }
-    }
-    
-    #player-controls-wrapper {
-        margin-left: auto;
-        margin-right: auto;
-    }
-    
-    @media (max-width: 768px) {
+        
+        @media (max-width: 768px) {
+            
+            #m-title-space {
+                min-height: 0.65rem;
+            }
+
+            #title-display {
+                position: static;
+                width: 100%;
+            } 
+            
+            #track-artist a {
+                color: #fff;
+            }
+            
+            #track-title {
+                display: inline;
+                font-size: 1rem;
+                // opacity: 0;
+            }
+        
+            #track-artist {
+                font-size: 1rem;
+                // opacity: 0;
+            }
+        
+            #track-artist::before {
+                content: " · ";
+                opacity: 1;
+            }
+        
+            #track-current-time,
+            #track-duration {
+                display: none;
+            }
+        
+            #progress-bar {
+                height: 3px;
+                margin-bottom: 3px;
+                width: 100vw;
+                opacity: 0.7;
+                position: absolute;
+                top: -10px;
+                left: 0px;
+            }
+        }
+        
         #player-controls-wrapper {
-            width: 100%
-        }   
-    }
-    
-    #player-controls {
-        width: 75%
-    }   
-    
-    @media (max-width: 768px) {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        @media (max-width: 768px) {
+            #player-controls-wrapper {
+                width: 100%
+            }   
+        }
+        
         #player-controls {
-            width: 100%
+            width: 75%
         }   
-    }
-    
-    #player-controls svg {
-        cursor: pointer;
-        // font-size: 0.9rem;
-        opacity: 0.85;
-        transition: all 0.1s ease-in-out;
-    }
-    
-    #player-controls label > svg {
-        font-size: 1.3rem;
-    }
-    
-    #player-controls svg:hover {
-        opacity: 1;
-        transform: scale(1.05);
-        filter: drop-shadow(0 0 0.75rem $theme-tint);
-        fill: $theme-tint-light;
-    }
-    
-    progress {
-        width: 30vw;
-    }
-    
-    progress[value] {
-        -webkit-appearance: none;
-        appearance: none;
-        background-color: white;
-        color: $theme-tint;
-        height: 5px;
-    }
-      
-    progress[value]::-webkit-progress-bar {
-        background-color: white;
-        border-radius: 2px;
-        border: 1px solid lighten(#acacac, 20%);
-        color: $theme-tint;
-    }
-    
-    progress::-webkit-progress-value {
-        background-color: $theme-tint;
-        filter: drop-shadow(0 0 0.4rem $theme-tint);
-    }
-    
-    .control-toggled {
-        filter: drop-shadow(0 0 0.75rem $theme-tint);
-        color: $theme-tint;
-    }
-    
-    #volume-bar {
-        border-radius: 8px;
-        height: 4px;
-        width: 90px;
-        outline: none;
-        // transition: background 450ms ease-in;
-        -webkit-appearance: none;
+        
+        @media (max-width: 768px) {
+            #player-controls {
+                width: 100%
+            }   
+        }
+        
+        #player-controls svg {
+            cursor: pointer;
+            // font-size: 0.9rem;
+            opacity: 0.85;
+            transition: all 0.1s ease-in-out;
+        }
+        
+        #player-controls label > svg {
+            font-size: 1.3rem;
+        }
+        
+        #player-controls svg:hover {
+            opacity: 1;
+            transform: scale(1.05);
+            filter: drop-shadow(0 0 0.75rem $neon-tint);
+            fill: lighten($color: $neon-tint, $amount: 20%);
+        }
+        
+        progress {
+            width: 30vw;
+        }
+        
+        progress[value] {
+            -webkit-appearance: none;
+            appearance: none;
+            background-color: white;
+            color: $neon-tint;
+            height: 5px;
+        }
+        
+        progress[value]::-webkit-progress-bar {
+            background-color: white;
+            border-radius: 2px;
+            border: 1px solid lighten(#acacac, 20%);
+            color: $neon-tint;
+        }
+        
+        progress::-webkit-progress-value {
+            background-color: $neon-tint;
+            filter: drop-shadow(0 0 0.4rem $neon-tint);
+        }
+        
+        .control-toggled {
+            filter: drop-shadow(0 0 0.75rem $neon-tint);
+            color: $neon-tint;
+        }
+        
+        #volume-bar {
+            border-radius: 8px;
+            height: 4px;
+            width: 90px;
+            outline: none;
+            // transition: background 450ms ease-in;
+            -webkit-appearance: none;
+        }
     }
 }
+
+@include playerFooter('rejected');
+@include playerFooter('accepted');
+@include playerFooter('pending');

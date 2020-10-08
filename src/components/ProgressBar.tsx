@@ -17,8 +17,8 @@ export default class ProgressBar extends AudioComponent<ProgressBarProps, State>
         this.props.didSeek(event.nativeEvent.offsetX, event.currentTarget.offsetWidth)
     }
 
-    getTimeString = (time?: number) => {
-        if (!time) return
+    getTimeString = (time: number) => {
+        // if (!time) {console.log(time); return}
 
         let minutes = Math.floor(time / 60)
         let seconds = Math.round(time - minutes * 60)
@@ -34,7 +34,7 @@ export default class ProgressBar extends AudioComponent<ProgressBarProps, State>
             <span id="track-current-time">
                 { active && this.getTimeString(currentTime) }
             </span>
-            <span id="seek-obj-container">
+            <span id="seek-obj-container" className="pb-1">
             <progress 
                 id="progress-bar" 
                 className="d-none d-md-inline-block" 

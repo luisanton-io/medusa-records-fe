@@ -42,8 +42,13 @@ $theme-tint-lighter: lighten($color: $theme-tint, $amount: 20);
     overflow: hidden;
 }
 
+.bg-gradient {
+    background: linear-gradient(38deg, rgb(29,28,28) 0%, rgb(58, 55, 60) 41%, rgb(56, 55, 62) 30%, rgb(73, 51, 58) 107%);
+}
+
 body {
-    background-color: #2b2a2a;
+    // background-color: #2b2a2a;
+    @extend .bg-gradient;
     color: var(--frost);
     font-family: 'Circular', 'Barlow', sans-serif;
     user-select: none;

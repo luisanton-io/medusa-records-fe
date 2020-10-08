@@ -1,22 +1,37 @@
 import React from 'react'
 import '../styles/Player.scss'
 import { AppBar, Toolbar } from '@material-ui/core'
+// import {
+//     PlayArrowRounded as PlayArrow,
+//     RepeatRounded as Repeat,
+//     SkipNextRounded as SkipNext,
+//     SkipPreviousRounded as SkipPrevious,
+//     ShuffleRounded as Shuffle, 
+//     VolumeOffRounded as VolumeOff,
+//     VolumeMuteRounded as VolumeMute,
+//     VolumeDownRounded as VolumeDown,
+//     VolumeUpRounded as VolumeUp,
+//     PauseRounded as Pause
+// } from '@material-ui/icons'
 import {
-    PlayArrowRounded as PlayArrow,
-    RepeatRounded as Repeat,
-    SkipNextRounded as SkipNext,
-    SkipPreviousRounded as SkipPrevious,
-    ShuffleRounded as Shuffle, 
-    VolumeOffRounded as VolumeOff,
-    VolumeMuteRounded as VolumeMute,
-    VolumeDownRounded as VolumeDown,
-    VolumeUpRounded as VolumeUp,
-    PauseRounded as Pause
+    PlayArrowSharp as PlayArrow,
+    RepeatSharp as Repeat,
+    SkipNextSharp as SkipNext,
+    SkipPreviousSharp as SkipPrevious,
+    ShuffleSharp as Shuffle, 
+    VolumeOffSharp as VolumeOff,
+    VolumeMuteSharp as VolumeMute,
+    VolumeDownSharp as VolumeDown,
+    VolumeUpSharp as VolumeUp,
+    PauseSharp as Pause
 } from '@material-ui/icons'
+
+
 
 import AudioComponent from '../models/AudioComponent'
 import { State } from 'react-flux-component'
 import ProgressBar from './ProgressBar'
+import { ReleaseStatusString } from '../models/ReleaseStatus'
 
 interface PlayerState extends State {
     shuffling: boolean,
@@ -26,9 +41,11 @@ interface PlayerState extends State {
     volume: number
 }
 
-export default class Player extends AudioComponent<{}, PlayerState> {
+interface PlayerProps {status: ReleaseStatusString}
 
-    constructor(props: {}) {
+export default class Player extends AudioComponent<PlayerProps, PlayerState> {
+
+    constructor(props: PlayerProps) {
         super(props)
         this.audioPlayer = React.createRef()
     }
@@ -73,7 +90,15 @@ export default class Player extends AudioComponent<{}, PlayerState> {
     }
 
     reward = () => {
-        console.log("Did press REWARD button.")
+        if (this.nowPlaying.value !== null) {
+            if (this.currentTime.value > 2) {
+                this.audioPlayer.current!.currentTime = 0
+            } else if (this.state.shuffling) {
+                this.nowPlaying.value = this.getRandomIx()
+            } else if (this.nowPlaying.value === 0) {
+                this.nowPlaying.value = this.state.cycling ? this.playlist.value.length - 1 : null
+            }
+        }
     }
 
     getRandomIx = () => {
@@ -81,8 +106,6 @@ export default class Player extends AudioComponent<{}, PlayerState> {
     }
 
     forward = () => {
-        console.log("Did press FORWARD button.")
-
         if (this.nowPlaying.value !== null) {
             if (this.state.shuffling) {
                 this.nowPlaying.value = this.getRandomIx()
@@ -113,15 +136,22 @@ export default class Player extends AudioComponent<{}, PlayerState> {
         const volume = muted ? 0 : this.state.volume
         const onAir = this.nowPlaying.value !== null ? this.playlist.value[this.nowPlaying.value] : null
 
+        const tint = this.props.status === 'accepted' 
+                        ? 'var(--success)'
+                        : this.props.status === 'rejected'
+                            ? 'var(--danger)'
+                            : 'var(--theme-tint)'
+        // console.log(document.querySelector('#player-footer-accepted'))
         return <AppBar 
             style={{position: "relative"}}
+            className="bg-transparent"
             >
-            <Toolbar className="bg-dark text-white px-0" id="player-footer">
+            <Toolbar className="bg-transparent text-white px-0 neon-glow" id={`player-footer-${this.props.status}`}>
                 <audio src={onAir?.audioURL} ref={this.audioPlayer} 
                 onTimeUpdate={({currentTarget: player}) => this.currentTime.value = player.currentTime} 
                 onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} />  
                 {
-                    onAir &&
+                    onAir ?
                     <div id="title-display" className="ml-3 my-1 text-white" style={{width: "auto"}}>
                         <h5 id="track-title">{onAir.title}</h5>
                         <span id="track-artist"> 
@@ -134,8 +164,9 @@ export default class Player extends AudioComponent<{}, PlayerState> {
                             }
                         </span>
                     </div>
+                    : <div id="m-title-space"></div>
                 }
-                <div id="player-controls-wrapper" className="d-flex flex-column mx-auto">
+                <div id="player-controls-wrapper" className="d-flex flex-column mx-auto pt-1">
                     <div id="player-controls" className="d-flex justify-content-around align-items-center mx-auto">
                         <label className={`form-check-label d-flex align-items-center ${shuffling ? "control-toggled" : ""}`}>
                             <input onChange={this.didToggleShuffle} type="checkbox" className="form-check-input d-none"
@@ -181,7 +212,7 @@ export default class Player extends AudioComponent<{}, PlayerState> {
                         onChange={this.tweakVolume}
                         style={{
                             maxWidth: "90px",
-                            background: `linear-gradient(to right, var(--theme-tint) 0%, var(--theme-tint) ${volume}%, #fff ${volume}%, #fff 100%)`
+                            background: `linear-gradient(to right, ${tint} 0%, ${tint} ${volume}%, #fff ${volume}%, #fff 100%)`
                         }} />
                 </div>
             </Toolbar>

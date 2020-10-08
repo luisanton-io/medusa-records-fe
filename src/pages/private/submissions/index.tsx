@@ -35,8 +35,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
     releases = this.hardBind(AudioComponent.shared.playlist)    
     nowPlaying = this.softBind(AudioComponent.shared.nowPlaying)
 
-    play = (index: number) => { // TEMP
-    // play = (release: ReleaseData) =>{
+    play = (index: number) => {
         this.nowPlaying.value = index
         const track = this.releases.value[index]
         console.log("playing " + index + track.title + " at " + track.audioURL)
@@ -50,7 +49,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         const response = await API.releases.get(this.state.status)
         const releases = await response.json() as ReleaseData[]
 
-        this.releases.value = releases
+        this.releases.value = [...releases, ...releases, ...releases, ...releases]
         console.log(this.releases.value)
         // this.setState({releases})
 
@@ -104,6 +103,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
 
     render() {
         const { status } = this.state
+        console.log(status)
         const releases = this.releases.value
 
         const self = this
@@ -145,8 +145,8 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
-                                <TableCell colSpan={2}>Title</TableCell>
-                                <TableCell colSpan={2}>Artists</TableCell>
+                                <TableCell style={{opacity: '0.9'}} colSpan={2}>Title</TableCell>
+                                <TableCell style={{opacity: '0.9'}} colSpan={2}>Artists</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -199,7 +199,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                         </TableBody>
                     </Table>
                 </TableContainer>
-                <Player />
+                <Player status={status}/>
             </Grid>
         </>)
     }
