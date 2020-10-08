@@ -3,7 +3,8 @@ import { Button, FormCheck } from 'react-bootstrap'
 import { 
     Done as AcceptIcon, 
     Clear as RejectIcon, 
-    SettingsBackupRestore as RestoreIcon 
+    SettingsBackupRestore as RestoreIcon, 
+    InfoOutlined
 } from '@material-ui/icons'
 import uniqid from 'uniqid'
 
@@ -58,8 +59,11 @@ export class PendingCtrls extends Component<PendingCtrlsProps, {}> {
         </div> 
     }
 }
+interface AcceptedCtrlsProps extends ControlProps {
+    openModal: () => void
+}
 
-export class AcceptedCtrls extends Component<ControlProps, {}> {
+export class AcceptedCtrls extends Component<AcceptedCtrlsProps, {}> {
 
     displaySwitch = () => {
         console.log("Showing/hiding on home")
@@ -67,6 +71,7 @@ export class AcceptedCtrls extends Component<ControlProps, {}> {
 
     render () {
         return <div className={ className }>
+            <Button variant="outline-dark" className="bg-transparent text-white border-0 rounded-0" onClick={this.props.openModal}><InfoOutlined /></Button>
             <FormCheck 
                 type="switch"
                 id={uniqid()}

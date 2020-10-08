@@ -51,8 +51,6 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
 
         this.releases.value = releases
         console.log(this.releases.value)
-        // this.setState({releases})
-
     }
 
     showModal = () => {
@@ -171,6 +169,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                                     />
                                             case ReleaseStatus.accepted: 
                                                 return <AcceptedCtrls 
+                                                    openModal={self.showModal}
                                                     releaseId={release._id!} 
                                                     />
                                         }
