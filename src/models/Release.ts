@@ -11,7 +11,8 @@ export interface ReleaseData {
     date: Date,
     genre?: Genre,
     audioURL: string,
-    coverBase64?: string
+    coverBase64?: string,
+    coverURL?: string,
     altContact?: string
 }
 
