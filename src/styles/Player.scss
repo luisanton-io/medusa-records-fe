@@ -3,6 +3,11 @@ $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
 
 #player-footer {
 
+    @media (max-width: 768px) {
+        flex-direction: column;
+        padding-bottom: 1rem;
+    }
+
 
     #player-section a:hover {
         color: white;
@@ -22,8 +27,19 @@ $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
         position: absolute;
     }
     
-    #track-artist a {
-        color: rgb(180, 179, 179);
+    #track-artist {
+        font-size: 0.7rem;
+        font-weight: 400;
+        a {
+            color: rgb(180, 179, 179);
+        }
+    }
+    
+    #track-title {
+        margin-bottom: 0px;
+        font-size: 0.9rem;
+        font-weight: 400;
+        letter-spacing: 0.7px;
     }
     
     @media (max-width: 768px) {
@@ -40,16 +56,16 @@ $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
         #track-title {
             display: inline;
             font-size: 1rem;
-            opacity: 0;
+            // opacity: 0;
         }
     
         #track-artist {
             font-size: 1rem;
-            opacity: 0;
+            // opacity: 0;
         }
     
         #track-artist::before {
-            content: "· ";
+            content: " · ";
             opacity: 1;
         }
     
@@ -116,7 +132,7 @@ $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
         -webkit-appearance: none;
         appearance: none;
         background-color: white;
-        color: $theme-tint-light;
+        color: $theme-tint;
         height: 5px;
     }
       
@@ -124,11 +140,12 @@ $theme-tint-light: lighten($color: $theme-tint, $amount: 20);
         background-color: white;
         border-radius: 2px;
         border: 1px solid lighten(#acacac, 20%);
-        color: $theme-tint-light;
+        color: $theme-tint;
     }
     
     progress::-webkit-progress-value {
-        background-color: $theme-tint-light;
+        background-color: $theme-tint;
+        filter: drop-shadow(0 0 0.4rem $theme-tint);
     }
     
     .control-toggled {

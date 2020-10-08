@@ -16,6 +16,7 @@ import {
 
 import AudioComponent from '../models/AudioComponent'
 import { State } from 'react-flux-component'
+import ProgressBar from './ProgressBar'
 
 interface PlayerState extends State {
     shuffling: boolean,
@@ -57,7 +58,8 @@ export default class Player extends AudioComponent<{}, PlayerState> {
                 ? this.setState({ paused: false }) //...now set we are playing
                 : player.play()
         } 
-    }
+    } 
+    
 
     didToggleShuffle = () => this.setState({shuffling: !this.state.shuffling})
     didToggleCycle = () => this.setState({cycling: !this.state.cycling})
@@ -82,32 +84,42 @@ export default class Player extends AudioComponent<{}, PlayerState> {
         console.log("Did press FORWARD button.")
 
         if (this.nowPlaying.value !== null) {
-            this.nowPlaying.value = this.state.shuffling
-                                        ? this.getRandomIx()
-                                        : this.nowPlaying.value + 1
+            if (this.state.shuffling) {
+                this.nowPlaying.value = this.getRandomIx()
+            } else if (this.nowPlaying.value === this.playlist.value.length - 1) {
+                this.nowPlaying.value = this.state.cycling ? 0 : null
+            } else this.nowPlaying.value++
         }
     }
 
-    playClicked = () => {
-        this.setState({paused: false})
+    playClicked  = () => this.setState({paused: false})
+    pauseClicked = () => this.setState({paused: true})
+    
+    
+    didSeek = (offsetX: number, width: number) => {
+        const player = this.audioPlayer.current
+        if (player) {
+            console.table({offsetX, width})
+            player.currentTime = offsetX / width * player.duration
+            this.currentTime.value = player.currentTime
+        } 
     }
-
-    pauseClicked = () => {
-        this.setState({paused: true})
-    }
-
+    
+    currentTime = this.softBind(AudioComponent.shared.currentTime)
+    duration = this.softBind(AudioComponent.shared.duration)
+    
     render() {
         const { cycling, muted, shuffling, paused } = this.state
         const volume = muted ? 0 : this.state.volume
-
         const onAir = this.nowPlaying.value !== null ? this.playlist.value[this.nowPlaying.value] : null
-        const player = this.audioPlayer.current
 
         return <AppBar 
             style={{position: "relative"}}
             >
             <Toolbar className="bg-dark text-white px-0" id="player-footer">
-                <audio src={onAir?.audioURL} id='audio-player' ref={this.audioPlayer} />  
+                <audio src={onAir?.audioURL} ref={this.audioPlayer} 
+                onTimeUpdate={({currentTarget: player}) => this.currentTime.value = player.currentTime} 
+                onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} />  
                 {
                     onAir &&
                     <div id="title-display" className="ml-3 my-1 text-white" style={{width: "auto"}}>
@@ -143,14 +155,7 @@ export default class Player extends AudioComponent<{}, PlayerState> {
                         </label>
                     </div>
                     <div className="d-flex justify-content-center align-items-center text-center">
-                        <span id="track-current-time"></span>
-                        <span id="seek-obj-container">
-                            <progress id="progress-bar" className="d-none d-md-inline-block" value={ player ? player.currentTime / player.duration : 0 }
-                                max="1"></progress>
-                        </span>
-                        <small style={{float: "left", position: "relative", left: "15px"}} id="start-time"></small>
-                        <small style={{float: "right", position: "relative", right: "20px"}} id="end-time"></small>
-                        <span id="track-duration"></span>
+                        <ProgressBar didSeek={this.didSeek} active={this.nowPlaying.value !== null}/>
                     </div>
 
                 </div>

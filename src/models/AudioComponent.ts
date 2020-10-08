@@ -3,12 +3,16 @@ import { ReleaseData } from './Release'
 
 interface SharedAudio {
     nowPlaying: number | null
-    playlist: ReleaseData[]
+    playlist: ReleaseData[],
+    currentTime: number,
+    duration: number
 }
 
 const shared: SharedAudio = {
     nowPlaying: null,
-    playlist: []
+    playlist: [],
+    currentTime: 0,
+    duration: 0
 }
 
 export default makeComponent(shared)
