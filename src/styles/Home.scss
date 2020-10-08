@@ -1,0 +1,36 @@
+#home {
+    .bg-circle {
+        min-width: 0vw; 
+        min-height: 0vw; 
+        background-color: #181818;
+        // border-radius: 500px;
+        animation-name: grow;
+        animation-duration: 4s;
+        animation-fill-mode: forwards;
+        position: absolute;
+        z-index: -1000;
+    }
+    
+    @keyframes grow {
+        0% {width: 0vw; height: 0vw; left: 50%;}
+        100% {width: 40vw; height: 40vw; left: calc(50% - 20vw);}
+    }
+    
+    @media (max-width: 768px) {   
+        @keyframes grow {
+            0% {width: 0vw; height: 0vw; left: 50%}
+            100% {width: 40vh; height: 40vh; left: calc(50% - 20vh) }
+        }    
+    }
+
+    .blurring {
+        animation-name: blurring;
+        animation-duration: 4s;
+        animation-fill-mode: forwards;
+    }
+
+    @keyframes blurring {
+        from    {filter: blur(160px)};
+        to      {filter: blur(0px)}
+    }
+}
