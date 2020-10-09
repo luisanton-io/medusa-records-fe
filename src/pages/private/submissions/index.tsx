@@ -17,11 +17,13 @@ import styles from './index.module.scss'
 
 import AudioComponent from '../../../models/AudioComponent';
 import { State } from 'react-flux-component';
+import SubmissionsModal from '../../../components/SubmissionsModal';
 // import styles from '../styles/Submissions.module.scss'
 
 interface SubmissionsState extends State {
     status: ReleaseStatusString
-    displayModal: boolean
+    displayModal: boolean,
+    selectedRelease?: ReleaseData
 }
 
 export default class Submissions extends AudioComponent<RouteComponentProps, SubmissionsState> {
@@ -34,11 +36,13 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
 
     releases = this.hardBind(AudioComponent.shared.playlist)    
     nowPlaying = this.softBind(AudioComponent.shared.nowPlaying)
+    paused = this.softBind(AudioComponent.shared.paused)
 
     play = (index: number) => {
         this.nowPlaying.value = index
         const track = this.releases.value[index]
-        console.log("playing " + index + track.title + " at " + track.audioURL)
+        this.paused.value = false
+        console.log("playing " + index + " " + track.title + " from " + track.audioURL)
     }
 
     componentDidMount = () => {
@@ -53,11 +57,13 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         console.log(this.releases.value)
     }
 
-    showModal = () => {
-        this.setState({displayModal: true})
+    showModal = (release: ReleaseData) => {
+        document.querySelector('#root')?.classList.add('blurred')
+        this.setState({displayModal: true, selectedRelease: release})
     }
-
+    
     closeModal = () => {
+        document.querySelector('#root')?.classList.remove('blurred')
         this.setState({displayModal: false})
     }
 
@@ -107,21 +113,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         const self = this
         
         return (<>
-            <Modal show={this.state.displayModal} onHide={this.closeModal}>
-                <Modal.Header closeButton>
-                    <Modal.Title>Modal heading</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>Woohoo, you're reading this text in a modal!</Modal.Body>
-                <Modal.Footer>
-                    <Button variant="secondary" onClick={this.closeModal}>
-                        Close
-                    </Button>
-                    <Button variant="primary" onClick={this.closeModal}>
-                        Save Changes
-                    </Button>
-                </Modal.Footer>
-            </Modal>
-
+            <SubmissionsModal release={this.state.selectedRelease} close={this.closeModal} display={this.state.displayModal}/>
             <Grid container className="flex-column no-scrollbar flex-nowrap" style={{
                 maxHeight: "100vh",
                 width: "100vw"
@@ -143,8 +135,14 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
-                                <TableCell style={{opacity: '0.9'}} colSpan={2}>Title</TableCell>
+                                <TableCell style={{opacity: '0.9'}}></TableCell>
+                                <TableCell className="pl-0" style={{opacity: '0.9'}}>Title</TableCell>
                                 <TableCell style={{opacity: '0.9'}} colSpan={2}>Artists</TableCell>
+                                { 
+                                    status === 'accepted' &&
+                                    <TableCell style={{opacity: '0.9', textAlign: 'center'}}>Display on Home</TableCell>
+
+                                }
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -155,22 +153,24 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                         switch (ReleaseStatus[status]) {
                                             case ReleaseStatus.rejected: 
                                                 return <RejectCtrls
-                                                    releaseId={release._id!} 
-                                                    openModal={self.showModal}
+                                                    release={release} 
+                                                    openModal={() => self.showModal(release)}
                                                     rejectNow={self.deleteRelease}
                                                     restore={self.restoreAsPending}
                                                     />
                                             case ReleaseStatus.pending:  
                                                 return <PendingCtrls
-                                                    releaseId={release._id!}
+                                                    release={release}
                                                     accept={self.acceptRelease}
                                                     reject={self.rejectRelease}
-                                                    openModal={self.showModal}
+                                                    openModal={() => self.showModal(release)}
                                                     />
                                             case ReleaseStatus.accepted: 
+                                                console.log(release)
                                                 return <AcceptedCtrls 
-                                                    openModal={self.showModal}
-                                                    releaseId={release._id!} 
+                                                    openModal={() => self.showModal(release)}
+                                                    release={release}
+                                                    checked={release.displayOnHome!}
                                                     />
                                         }
                                     })()
@@ -189,9 +189,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                         <TableCell>
                                             { release.mainArtists.join(', ') }
                                         </TableCell>
-                                        <TableCell>
-                                            { controls }
-                                        </TableCell>
+                                        { controls }
                                     </TableRow>)
                                 })
                             }
