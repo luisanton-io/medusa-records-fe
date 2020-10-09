@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import { Button, FormCheck } from 'react-bootstrap'
 import { 
     Done as AcceptIcon, 
@@ -9,12 +9,16 @@ import {
 import uniqid from 'uniqid'
 
 import styles from '../pages/private/submissions/index.module.scss';
+import { API } from '../routes/API';
+import { useToast } from '../models/Toast/hook';
+import { TableCell } from '@material-ui/core';
+import { ReleaseData } from '../models/Release';
 
 // import { ReleaseStatus, ReleaseStatusString } from '../models/ReleaseStatus';
 // import { ReleaseData } from '../models/Release';
 
 interface ControlProps {
-    releaseId: string
+    release: ReleaseData
 }
 
 const className = styles['release-row-controls']
@@ -27,15 +31,17 @@ interface RejectCtrlsProps extends ControlProps {
 
 export class RejectCtrls extends Component<RejectCtrlsProps, {}> {
     render() { 
-        const { restore, rejectNow, releaseId } = this.props
-        return <div className={ className }>
-            <Button variant="outline-warning" className="mr-2 rounded-pill" onClick={() => restore(releaseId)}>
-                <RestoreIcon className="mr-2" />Restore as pending
-            </Button>
-            <Button variant="outline-danger" className="rounded-pill" onClick={() => rejectNow(releaseId)}>
-                <RejectIcon className="mr-2" />Reject now
-            </Button>
-        </div> 
+        const { restore, rejectNow, release } = this.props
+        return <TableCell>
+            <div className={ className }>
+                <Button variant="outline-warning" className="mr-2 rounded-pill" onClick={() => restore(release._id!)}>
+                    <RestoreIcon className="mr-2" />Restore as pending
+                </Button>
+                <Button variant="outline-danger" className="rounded-pill" onClick={() => rejectNow(release._id!)}>
+                    <RejectIcon className="mr-2" />Reject now
+                </Button>
+            </div> 
+        </TableCell>
     }
 }
 
@@ -48,36 +54,67 @@ interface PendingCtrlsProps extends ControlProps {
 export class PendingCtrls extends Component<PendingCtrlsProps, {}> {
 
     render () {
-        let { accept, reject, releaseId } = this.props
-        return <div className={ className }>
-            <Button variant="outline-success" className="mr-2 rounded-pill" onClick={() => accept(releaseId)}>
-                <AcceptIcon />
-            </Button>
-            <Button variant="outline-danger" className="rounded-pill" onClick={() => reject(releaseId)}>
-                <RejectIcon />
-            </Button>
-        </div> 
+        let { accept, reject, release } = this.props
+        return <TableCell>
+            <div className={ className }>
+                <Button variant="outline-success" className="mr-2 rounded-pill" onClick={() => accept(release._id!)}>
+                    <AcceptIcon />
+                </Button>
+                <Button variant="outline-danger" className="rounded-pill" onClick={() => reject(release._id!)}>
+                    <RejectIcon />
+                </Button>
+            </div> 
+        </TableCell>
     }
 }
+
 interface AcceptedCtrlsProps extends ControlProps {
     openModal: () => void
+    checked: boolean
 }
 
-export class AcceptedCtrls extends Component<AcceptedCtrlsProps, {}> {
+export function AcceptedCtrls (props: AcceptedCtrlsProps) {
+    
+    const [checked, setChecked] = useState(props.checked)
+    const { setToast } = useToast()
 
-    displaySwitch = () => {
-        console.log("Showing/hiding on home")
+    const displaySwitch = async () => {
+        console.log("Display on home")
+
+        const response = await API.releases.put(
+            props.release._id!, 
+            {displayOnHome: !checked}
+        )
+
+        if (response.status !== 204) {
+            setToast({
+                display: true, severity: "error",
+                message: "Something went wrong. Try again later."
+            })
+        } else setChecked(!checked)
     }
 
-    render () {
-        return <div className={ className }>
-            <Button variant="outline-dark" className="bg-transparent text-white border-0 rounded-0" onClick={this.props.openModal}><InfoOutlined /></Button>
-            <FormCheck 
-                type="switch"
-                id={uniqid()}
-                label="Show on Homepage"
-                onChange={this.displaySwitch}
-                />
-        </div> 
-    }
+    return <>
+        <TableCell>
+            <div className={ className }>
+                <Button variant="outline-dark"
+                className="bg-transparent text-white border-0 rounded-0" 
+                onClick={props.openModal}>
+                    <InfoOutlined />
+                </Button>
+            </div>
+        </TableCell>
+        <TableCell>
+            <div className="d-flex w-100 h-100">
+                <FormCheck 
+                    type="switch"
+                    id={uniqid()}
+                    label=""
+                    className="m-auto"
+                    onChange={displaySwitch}
+                    checked={checked}
+                    />
+            </div>
+        </TableCell>
+    </>
 }
