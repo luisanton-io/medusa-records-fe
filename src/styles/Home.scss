@@ -13,7 +13,7 @@
     
     @keyframes grow {
         0% {width: 0vw; height: 0vw; left: 50%;}
-        100% {width: 40vw; height: 40vw; left: calc(50% - 20vw);}
+        100% {width: 40vw; height: 40vw; left: calc(50% - 20vw); transform: rotate(90deg);}
     }
     
     @media (max-width: 768px) {   
@@ -28,9 +28,5 @@
         animation-duration: 4s;
         animation-fill-mode: forwards;
     }
-
-    @keyframes blurring {
-        from    {filter: blur(160px)};
-        to      {filter: blur(0px)}
-    }
+    
 }
