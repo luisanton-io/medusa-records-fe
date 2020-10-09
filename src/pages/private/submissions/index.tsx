@@ -1,9 +1,7 @@
 import React from 'react'
 import { RouteComponentProps } from 'react-router-dom';
 import { Grid, Typography, TableContainer, Table, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
-import { Button } from 'react-bootstrap'
-import { PlayCircleOutlineOutlined as PlayIcon } from '@material-ui/icons';
-import { Modal } from 'react-bootstrap'
+import { InfoOutlined, PlayCircleOutlineOutlined as PlayIcon } from '@material-ui/icons';
 
 import uniqid from 'uniqid'
 
@@ -18,7 +16,6 @@ import styles from './index.module.scss'
 import AudioComponent from '../../../models/AudioComponent';
 import { State } from 'react-flux-component';
 import SubmissionsModal from '../../../components/SubmissionsModal';
-// import styles from '../styles/Submissions.module.scss'
 
 interface SubmissionsState extends State {
     status: ReleaseStatusString
@@ -137,12 +134,14 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                             <TableRow>
                                 <TableCell style={{opacity: '0.9'}}></TableCell>
                                 <TableCell className="pl-0" style={{opacity: '0.9'}}>Title</TableCell>
-                                <TableCell style={{opacity: '0.9'}} colSpan={2}>Artists</TableCell>
-                                { 
-                                    status === 'accepted' &&
-                                    <TableCell style={{opacity: '0.9', textAlign: 'center'}}>Display on Home</TableCell>
-
-                                }
+                                <TableCell style={{opacity: '0.9'}}>Artists</TableCell>
+                                <TableCell>Info</TableCell>
+                                <TableCell style={{opacity: '0.9', textAlign: 'center'}}>
+                                    {
+                                        status === 'accepted' && 'Display on Home'
+                                    }
+                                </TableCell>
+                                
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -154,7 +153,6 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                             case ReleaseStatus.rejected: 
                                                 return <RejectCtrls
                                                     release={release} 
-                                                    openModal={() => self.showModal(release)}
                                                     rejectNow={self.deleteRelease}
                                                     restore={self.restoreAsPending}
                                                     />
@@ -163,14 +161,11 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                                     release={release}
                                                     accept={self.acceptRelease}
                                                     reject={self.rejectRelease}
-                                                    openModal={() => self.showModal(release)}
                                                     />
                                             case ReleaseStatus.accepted: 
                                                 console.log(release)
                                                 return <AcceptedCtrls 
-                                                    openModal={() => self.showModal(release)}
                                                     release={release}
-                                                    checked={release.displayOnHome!}
                                                     />
                                         }
                                     })()
@@ -189,7 +184,12 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                         <TableCell>
                                             { release.mainArtists.join(', ') }
                                         </TableCell>
-                                        { controls }
+                                        <TableCell>
+                                            <InfoOutlined onClick={() => this.showModal(release)}/>
+                                        </TableCell>
+                                        <TableCell>
+                                            { controls }
+                                        </TableCell>
                                     </TableRow>)
                                 })
                             }
