@@ -25,7 +25,7 @@ export default class Home extends React.Component<{}, HomeState> {
     }
 
     getReleases = async () => {
-        const response = await API.releases.get('accepted')
+        const response = await API.releases.home
         const releases = response.status === 200
             ? (await response.json())
             : []
@@ -53,7 +53,7 @@ export default class Home extends React.Component<{}, HomeState> {
 
                     <Grid item xs={12} md={5} className='d-flex flex-column justify-content-center mx-auto' style={{ minHeight: '100vh' }}>
                         <div className='bg-circle'></div>
-                        <img className="w-50 img-fluid mx-auto blurring" src="/assets/medusa-original.png" />
+                        <img className="w-50 img-fluid mx-auto blurring" src="/assets/medusa-original.png" alt="medusa-logo" />
                         <MedusaHeader />
                         <Typography component="h5" variant="h5" className="mt-5 ml-auto" style={{
                             fontWeight: 800,
@@ -68,7 +68,7 @@ export default class Home extends React.Component<{}, HomeState> {
                             this.state.releases.map(release =>
                                 <Grid item xs={12} md={4} key={uniqid()}>
                                     <a href={'https://www.google.com'}>
-                                        <img className='img-fluid px-1' src={release.coverURL!} />
+                                        <img className='img-fluid px-1' src={release.coverURL!} alt={release.title}/>
                                     </a>
                                 </Grid>
                             )
