@@ -1,5 +1,5 @@
 import React from 'react'
-import { Modal, Button } from 'react-bootstrap'
+import { Container, Row, Col, Modal, Button, Badge } from 'react-bootstrap'
 import { ReleaseData } from '../models/Release'
 import { ReleaseStatusString } from '../models/ReleaseStatus'
 
@@ -15,17 +15,36 @@ export default function SubmissionsModal({release, display, close}: SubmissionsM
     const { status } = release
     return <Modal show={display} onHide={close}>
         <Modal.Header closeButton>
-            <Modal.Title>Modal heading</Modal.Title>
+        <Modal.Title>{release.title}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-            <div>Release Data:
-            </div>
-            <div>
-                {/* {JSON.stringify(release)} */}
-            </div>
+            <Container>
+                <Row>
+                    <Col xs={6}>
+                        First Name: {release.firstName}
+                    </Col>
+                    <Col xs={6}>
+                        Last Name: {release.lastName}
+                    </Col>
+                    <Col xs={6}>
+                        Email: {release.email}
+                    </Col>
+                    <Col xs={6}>
+                        Artists: {
+                            release.mainArtists.map(artist => <Badge variant="secondary" className="ml-1">{artist}</Badge>)
+                        }{
+                            release.featurings.length > 0 &&
+                            <> feat. {
+                                    release.featurings.map(feat => <Badge variant="secondary" className="ml-1">{feat}</Badge>)
+                                }
+                            </>
+                        }
+                    </Col>
+                </Row>
+            </Container>
         </Modal.Body>
         <Modal.Footer>
-            <a href={release.audioURL} download>Downlaod</a>
+            <a href={release.audioURL} download>Download</a>
             <Button variant="secondary" onClick={close}>
                 Close
             </Button>
