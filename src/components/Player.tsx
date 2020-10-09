@@ -1,18 +1,6 @@
 import React from 'react'
 import '../styles/Player.scss'
 import { AppBar, Toolbar } from '@material-ui/core'
-// import {
-//     PlayArrowRounded as PlayArrow,
-//     RepeatRounded as Repeat,
-//     SkipNextRounded as SkipNext,
-//     SkipPreviousRounded as SkipPrevious,
-//     ShuffleRounded as Shuffle, 
-//     VolumeOffRounded as VolumeOff,
-//     VolumeMuteRounded as VolumeMute,
-//     VolumeDownRounded as VolumeDown,
-//     VolumeUpRounded as VolumeUp,
-//     PauseRounded as Pause
-// } from '@material-ui/icons'
 import {
     PlayArrowSharp as PlayArrow,
     RepeatSharp as Repeat,
@@ -68,19 +56,10 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
 
     componentDidUpdate = () => {
         const player = this.audioPlayer.current!
-        const index = this.nowPlaying.value
-
-        this.paused.value ? player.pause() : player.play()
-
-        // if (this.state.paused && !player.paused) { //
-        //     player.pause()
-        // } else if (player.paused && index !== null) {
-        //     this.state.paused //if it was initialized and later paused...
-        //         ? this.setState({ paused: false }) //...now set we are playing
-        //         : player.play()
-        // } 
+        this.paused.value 
+            ? player.pause() 
+            : player.play()
     } 
-    
     
     didToggleShuffle = () => this.setState({shuffling: !this.state.shuffling})
     didToggleCycle = () => this.setState({cycling: !this.state.cycling})
