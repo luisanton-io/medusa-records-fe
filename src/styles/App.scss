@@ -133,3 +133,41 @@ a:hover {
         @extend .file-picker:hover;
     }
 }
+
+.modal-content {
+    // background-color: transparent;
+    background-color: rgba($color: (#302e2e), $alpha: 0.8) !important;
+    border-radius: 0px;
+    border: 0px;
+    animation: blurring-sm 0.6s forwards;
+    
+    .bg-modal {
+        background-color: rgba($color: (#302e2e), $alpha: 0.8) !important;
+        position: absolute;
+        min-width: 100%;
+        min-height: 100%;
+        z-index: -1;
+        // filter: blur(16px);
+    }
+
+    button {
+        border-radius: 0px;
+        &.close {
+            color: white
+        }
+    }
+}
+
+.blurred {
+    filter: blur(16px)
+}
+
+@keyframes blurring {
+    from    {filter: blur(160px)};
+    to      {filter: blur(0px)}
+}
+
+@keyframes blurring-sm {
+    from    {filter: blur(16px)};
+    to      {filter: blur(0px)}
+}
