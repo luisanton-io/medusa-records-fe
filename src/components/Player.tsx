@@ -37,7 +37,6 @@ interface PlayerState extends State {
     shuffling: boolean,
     cycling: boolean,
     muted: boolean,
-    paused: boolean,
     volume: number
 }
 
@@ -57,30 +56,52 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
         shuffling: false,
         cycling: false,
         muted: false,
-        paused: true,
         volume: 100
     }
 
     nowPlaying = this.hardBind(AudioComponent.shared.nowPlaying)
     playlist = this.hardBind(AudioComponent.shared.playlist)
+    paused = this.hardBind(AudioComponent.shared.paused)
+
+    currentTime = this.softBind(AudioComponent.shared.currentTime)
+    duration = this.softBind(AudioComponent.shared.duration)
 
     componentDidUpdate = () => {
         const player = this.audioPlayer.current!
         const index = this.nowPlaying.value
 
-        if (this.state.paused && !player.paused) { //
-            player.pause()
-        } else if (player.paused && index !== null) {
-            this.state.paused //if it was initialized and later paused...
-                ? this.setState({ paused: false }) //...now set we are playing
-                : player.play()
-        } 
+        this.paused.value ? player.pause() : player.play()
+
+        // if (this.state.paused && !player.paused) { //
+        //     player.pause()
+        // } else if (player.paused && index !== null) {
+        //     this.state.paused //if it was initialized and later paused...
+        //         ? this.setState({ paused: false }) //...now set we are playing
+        //         : player.play()
+        // } 
     } 
     
-
+    
     didToggleShuffle = () => this.setState({shuffling: !this.state.shuffling})
     didToggleCycle = () => this.setState({cycling: !this.state.cycling})
-    didToggleMute = () => this.setState({muted: !this.state.muted}) 
+    didToggleMute = () => {
+        this.setState({
+            muted: !this.state.muted
+        }, () => {
+            this.audioPlayer.current!.volume = this.state.muted ? 0 : this.state.volume/100
+        })
+    } 
+    
+    didSeek = (offsetX: number, width: number) => {
+        if (this.nowPlaying.value === null) return
+
+        const player = this.audioPlayer.current
+        if (player) {
+            console.table({offsetX, width})
+            player.currentTime = offsetX / width * player.duration
+            this.currentTime.value = player.currentTime
+        } 
+    }
 
     tweakVolume = ({currentTarget}: React.FormEvent<HTMLInputElement>) => {
         this.setState({muted: false, volume: parseInt(currentTarget.value)}, () => 
@@ -88,7 +109,7 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
         )
         console.log("Volume is: " + currentTarget.value)
     }
-
+    
     reward = () => {
         if (this.nowPlaying.value !== null) {
             if (this.currentTime.value > 2) {
@@ -101,10 +122,7 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
         }
     }
 
-    getRandomIx = () => {
-        return Math.floor(Math.random() * Math.floor(this.playlist.value.length))
-    }
-
+    
     forward = () => {
         if (this.nowPlaying.value !== null) {
             if (this.state.shuffling) {
@@ -114,26 +132,14 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
             } else this.nowPlaying.value++
         }
     }
-
-    playClicked  = () => this.setState({paused: false})
-    pauseClicked = () => this.setState({paused: true})
     
-    
-    didSeek = (offsetX: number, width: number) => {
-        const player = this.audioPlayer.current
-        if (player) {
-            console.table({offsetX, width})
-            player.currentTime = offsetX / width * player.duration
-            this.currentTime.value = player.currentTime
-        } 
+    getRandomIx = () => {
+        return Math.floor(Math.random() * Math.floor(this.playlist.value.length))
     }
-    
-    currentTime = this.softBind(AudioComponent.shared.currentTime)
-    duration = this.softBind(AudioComponent.shared.duration)
-    
     render() {
-        const { cycling, muted, shuffling, paused } = this.state
+        const { cycling, muted, shuffling } = this.state
         const volume = muted ? 0 : this.state.volume
+        const paused = this.paused.value
         const onAir = this.nowPlaying.value !== null ? this.playlist.value[this.nowPlaying.value] : null
 
         const tint = this.props.status === 'accepted' 
@@ -177,8 +183,8 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
                         </label>
                         <SkipPrevious onClick={this.reward} />
                         {
-                            paused  ? <PlayArrow onClick={ this.playClicked } />
-                                    : <Pause onClick={ this.pauseClicked } />
+                            paused  ? <PlayArrow onClick={ () => this.paused.value = false } />
+                                    : <Pause     onClick={ () => this.paused.value = true  } />
                         }
                         <SkipNext onClick={this.forward} />
                         <label className={`form-check-label d-flex align-items-center ${cycling ? "control-toggled" : ""}`}>
