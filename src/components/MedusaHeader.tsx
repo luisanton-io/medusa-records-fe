@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useTrail, animated } from 'react-spring'
 import '../styles/MedusaHeader.scss'
 
@@ -9,15 +9,12 @@ interface HeaderProps {
     onClick?: (event: React.MouseEvent<HTMLDivElement, MouseEvent>) => void
 }
 export default function MedusaHeader(props: HeaderProps) {
-  const [toggle, set] = useState(true)
+
   const trail = useTrail(items.length, {
-    config,
-    opacity: toggle ? 1 : 0,
-    x: toggle ? 0 : 20,
-    height: toggle ? 80 : 0,
+    config, opacity: 1, x:  0, height: 80,
     from: { opacity: 0, x: 20, height: 0 },
   })
-
+  
   return (
     <div id='medusa-header'>
         <div className="trails-main">
