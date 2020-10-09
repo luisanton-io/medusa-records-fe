@@ -1,4 +1,5 @@
 import { Genre } from "./Genre";
+import { ReleaseStatus } from "./ReleaseStatus";
 
 export interface ReleaseData {
     _id?: string,
@@ -13,7 +14,9 @@ export interface ReleaseData {
     audioURL: string,
     coverBase64?: string,
     coverURL?: string,
-    altContact?: string
+    altContact?: string,
+    displayOnHome?: boolean,
+    status?: ReleaseStatus
 }
 
 export const emptyRelease: ReleaseData = {
