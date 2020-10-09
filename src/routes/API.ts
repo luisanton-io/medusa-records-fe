@@ -26,6 +26,9 @@ export const API = {
         )
     },
     releases: {
+        home: fetch(
+            `${endpoint.releases}/home`
+        ),
         get: (status: string) => fetch(
             `${endpoint.releases}/${ status }`,
             {
@@ -41,7 +44,7 @@ export const API = {
                 body: JSON.stringify(data)
             }
         ),
-        put: (releaseId: string, data: {status: ReleaseStatus} | {date: Date}) => fetch(
+        put: (releaseId: string, data: {status: ReleaseStatus, displayOnHome?: boolean} | {displayOnHome: boolean} | {date: Date}) => fetch(
             `${endpoint.releases}/${releaseId}`, 
             {
                 method: "PUT",
