@@ -11,6 +11,7 @@ import styles from '../pages/private/submissions/index.module.scss';
 import { API } from '../routes/API';
 import { useToast } from '../models/Toast/hook';
 import { ReleaseData } from '../models/Release';
+import { genericError } from '../models/Toast/genericError';
 
 // import { ReleaseStatus, ReleaseStatusString } from '../models/ReleaseStatus';
 // import { ReleaseData } from '../models/Release';
@@ -70,16 +71,13 @@ export function AcceptedCtrls ({release}: {release: ReleaseData}) {
             {displayOnHome: !checked}
         )
 
-        if (response.status !== 204) {
-            setToast({
-                display: true, severity: "error",
-                message: "Something went wrong. Try again later."
-            })
-        } else setChecked(!checked)
+        response.status !== 204
+            ? setToast(genericError)
+            : setChecked(!checked)
     }
 
     return <div className="d-flex w-100 h-100">
-        <FormCheck 
+        <FormCheck
             type="switch"
             id={uniqid()}
             label=""
