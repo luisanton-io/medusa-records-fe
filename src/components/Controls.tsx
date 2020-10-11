@@ -74,7 +74,7 @@ function PendingCtrls ({release, refresh}: ControlsProps) {
     }
     
     const rejectRelease = async (id: string) => {
-        const response = await API.releases.put(id, { status: ReleaseStatus.rejected })
+        const response = await API.releases.reject(id)
         
         if (response.status === 204) {
             alert("Release rejected.")
