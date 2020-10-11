@@ -2,9 +2,10 @@ import { Credentials } from "../models/Credentials";
 import { ReleaseData } from "../models/Release";
 import { ReleaseStatus } from "../models/ReleaseStatus";
 
-export const endpoint = {
+const endpoint = {
     login: process.env.REACT_APP_ENDPOINT_ROOT + "/login",
     releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
+    acceptRelease: process.env.REACT_APP_ENDPOINT_ROOT + "/releases/accept",
     checkAuth: process.env.REACT_APP_ENDPOINT_ROOT + "/checkAuth",
     refreshToken: process.env.REACT_APP_ENDPOINT_ROOT + "/login/refreshToken",
 }
@@ -42,6 +43,14 @@ export const API = {
                 method: "POST",
                 headers: jsonHeaders,
                 body: JSON.stringify(data)
+            }
+        ),
+        accept: (releaseId: string) => fetch(
+            `${endpoint.acceptRelease}/${releaseId}`,
+            {
+                method: "PUT",
+                headers: jsonHeaders,
+                credentials: "include"
             }
         ),
         put: (releaseId: string, data: {status: ReleaseStatus, displayOnHome?: boolean} | {displayOnHome: boolean} | {date: Date}) => fetch(
