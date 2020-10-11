@@ -115,6 +115,7 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
     getRandomIx = () => {
         return Math.floor(Math.random() * Math.floor(this.playlist.value.length))
     }
+
     render() {
         const { cycling, muted, shuffling } = this.state
         const volume = muted ? 0 : this.state.volume
@@ -126,16 +127,16 @@ export default class Player extends AudioComponent<PlayerProps, PlayerState> {
                         : this.props.status === 'rejected'
                             ? 'var(--danger)'
                             : 'var(--theme-tint)'
-        // console.log(document.querySelector('#player-footer-accepted'))
-        return <AppBar 
+
+                            return <AppBar 
             style={{position: "relative"}}
             className="bg-transparent"
             >
             <Toolbar className="bg-transparent text-white px-0 neon-glow" id={`player-footer-${this.props.status}`}>
                 <audio src={onAir?.audioURL} ref={this.audioPlayer} 
-                onTimeUpdate={({currentTarget: player}) => this.currentTime.value = player.currentTime} 
-                onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} 
-                onEnded={this.forward}
+                    onTimeUpdate={({currentTarget: player}) => this.currentTime.value = player.currentTime} 
+                    onLoadedData={({currentTarget: player}) => this.duration.value = player.duration} 
+                    onEnded={this.forward}
                 />  
                 {
                     onAir ?
