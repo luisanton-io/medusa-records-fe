@@ -51,7 +51,7 @@ export default function SubmissionsModal({ release, display, close }: Submission
             <Table variant="dark" size="sm" className="bg-transparent">
                 <tbody>
                     <tr>
-                        <td colSpan={2}>
+                        <td colSpan={2} style={{borderTop: '0px'}}>
                             <div className="h-100 w-100 text-center">
                                 <a href={release.coverURL} target="_blank" rel="noopener noreferrer" download>
                                     <img className="img-fluid w-50" src={release.coverURL} alt={release.title} />
