@@ -6,6 +6,7 @@ const endpoint = {
     login: process.env.REACT_APP_ENDPOINT_ROOT + "/login",
     releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
     acceptRelease: process.env.REACT_APP_ENDPOINT_ROOT + "/releases/accept",
+    rejectRelease: process.env.REACT_APP_ENDPOINT_ROOT + "/releases/reject",
     checkAuth: process.env.REACT_APP_ENDPOINT_ROOT + "/checkAuth",
     refreshToken: process.env.REACT_APP_ENDPOINT_ROOT + "/login/refreshToken",
 }
@@ -47,6 +48,14 @@ export const API = {
         ),
         accept: (releaseId: string) => fetch(
             `${endpoint.acceptRelease}/${releaseId}`,
+            {
+                method: "PUT",
+                headers: jsonHeaders,
+                credentials: "include"
+            }
+        ),
+        reject: (releaseId: string) => fetch (
+            `${endpoint.rejectRelease}/${releaseId}`,
             {
                 method: "PUT",
                 headers: jsonHeaders,
