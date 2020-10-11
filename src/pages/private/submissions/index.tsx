@@ -46,6 +46,10 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         this.getReleases()
     }
 
+    componentDidUpdate = () => {
+        this.getReleases()
+    }
+
     getReleases = async () => {
         const response = await API.releases.get(this.state.status)
         const releases = await response.json() as ReleaseData[]
