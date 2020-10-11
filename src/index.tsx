@@ -4,46 +4,27 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import fetchIntercept from 'fetch-intercept';
 import { Routes } from './routes/Routes';
 import { API } from './routes/API';
 
-// const unregister = 
-fetchIntercept.register({
-    request: function (url, config) {
-        // Modify the url or config here
-        return [url, config];
-    },
+const fetch = window.fetch;
+window.fetch = (...args) => (async(args) => {
+    let response = await fetch(...args);
 
-    requestError: function (error) {
-        // Called when an error occured during another 'request' interceptor call
-        return Promise.reject(error);
-    },
-
-    response: function (response) {
-
-      switch (response.status) {
-        case 403:
-          console.log(response);
-          (async () => await API.refreshToken())()
-          break 
-        case 222: 
-          render() //Re-rendering after successfully getting a new refreshed token.
-          break
-        case 401:         
-          window.location.pathname = Routes.public.login
-          break
-        default: break
+    if (response.status === 403) {
+      response = await API.refreshToken()
+      
+      if (response.status === 222) {
+        response = await fetch(...args)
       }
-
-        return response;
-    },
-
-    responseError: function (error) {
-        // Handle an fetch error
-        return Promise.reject(error);
     }
-});
+
+    if (response.status === 401) {
+      window.location.pathname = Routes.public.login
+    }
+
+    return response;
+})(args);
 
 function render() {
   ReactDOM.render(
