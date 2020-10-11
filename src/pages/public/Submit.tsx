@@ -30,6 +30,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { audioSrc } from '../../utilities/audioSrc';
 import { useToast } from '../../models/Toast/hook';
+import { genericError } from '../../models/Toast/genericError';
 // import ToastComponent from '../../models/Toast/component'
 //#endregion
 
@@ -71,6 +72,7 @@ export default function Submit() {
   const [release, setRelease] = useState(emptyRelease)
   const [typingArtist, setTypingArtist] = useState("")
   const [typingFeats, setTypingFeats] = useState("")
+  const [submitted, setSubmitted] = useState(false)
   const { getToast, setToast } = useToast()
   const toast = getToast()
 
@@ -87,10 +89,12 @@ export default function Submit() {
     submitEvent.preventDefault()
     const response = await API.releases.post(release)
     const { message } = await response.json()
-    
+
+    setSubmitted(response.status === 201)
+  
     setToast({
       display: true,
-      message: JSON.stringify(message),
+      message,
       severity: response.status === 201 ? "success" : "error"
     })
   }
@@ -461,6 +465,7 @@ export default function Submit() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
+                disabled={submitted}
               >
                 Submit
               </Button>
