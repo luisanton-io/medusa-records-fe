@@ -2,7 +2,7 @@ import { Credentials } from "../models/Credentials";
 import { ReleaseData } from "../models/Release";
 import { ReleaseStatus } from "../models/ReleaseStatus";
 
-const endpoint = {
+export const endpoint = {
     login: process.env.REACT_APP_ENDPOINT_ROOT + "/login",
     releases: process.env.REACT_APP_ENDPOINT_ROOT + "/releases",
     checkAuth: process.env.REACT_APP_ENDPOINT_ROOT + "/checkAuth",
