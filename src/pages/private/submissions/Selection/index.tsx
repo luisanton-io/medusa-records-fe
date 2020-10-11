@@ -27,8 +27,8 @@ export default function SelectSubsList() {
                     src="/assets/submit-bg.jpg" 
                     />
 
-                <Grid item xs={12} className="d-flex">
-                <Typography component="h1" variant="h2" className="m-auto" style={{
+                <Grid item xs={12} className="d-flex my-4 my-md-0">
+                <Typography component="h1" variant="h2" className="m-auto mobile-h2" style={{
                     fontWeight: 800,
                     fontFamily: "Circular"
                 }}>
