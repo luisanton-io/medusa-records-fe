@@ -1,13 +1,13 @@
 import React from 'react'
-import { RouteComponentProps } from 'react-router-dom';
+import { Link, RouteComponentProps } from 'react-router-dom';
 import { Grid, Typography, TableContainer, Table, TableHead, TableRow, TableBody, TableCell } from '@material-ui/core';
-import { InfoOutlined, PlayCircleOutlineOutlined as PlayIcon } from '@material-ui/icons';
+import { ArrowBack, InfoOutlined, PlayCircleOutlineOutlined as PlayIcon } from '@material-ui/icons';
 
 import uniqid from 'uniqid'
 
 import Player from '../../../components/Player';
-import { AcceptedCtrls, PendingCtrls, RejectCtrls } from '../../../components/Controls';
-import { ReleaseStatus, ReleaseStatusString } from '../../../models/ReleaseStatus';
+import { Controls } from '../../../components/Controls';
+import { ReleaseStatusString } from '../../../models/ReleaseStatus';
 import { ReleaseData } from '../../../models/Release';
 import { API } from '../../../routes/API';
 
@@ -16,6 +16,7 @@ import styles from './index.module.scss'
 import AudioComponent from '../../../models/AudioComponent';
 import { State } from 'react-flux-component';
 import SubmissionsModal from '../../../components/SubmissionsModal';
+import { Routes } from '../../../routes/Routes';
 
 interface SubmissionsState extends State {
     status: ReleaseStatusString
@@ -35,27 +36,20 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
     nowPlaying = this.softBind(AudioComponent.shared.nowPlaying)
     paused = this.softBind(AudioComponent.shared.paused)
 
-    play = (index: number) => {
-        this.nowPlaying.value = index
-        const track = this.releases.value[index]
-        this.paused.value = false
-        console.log("playing " + index + " " + track.title + " from " + track.audioURL)
-    }
-
-    componentDidMount = () => {
-        this.getReleases()
-    }
-
-    componentDidUpdate = () => {
-        this.getReleases()
-    }
-
+    componentDidMount  = () => this.getReleases()
+    componentDidUpdate = () => this.getReleases()
+    
     getReleases = async () => {
         const response = await API.releases.get(this.state.status)
         const releases = await response.json() as ReleaseData[]
 
         this.releases.value = releases
         console.log(this.releases.value)
+    }
+
+    play = (index: number) => {
+        this.nowPlaying.value = index
+        this.paused.value = false
     }
 
     showModal = (release: ReleaseData) => {
@@ -68,50 +62,9 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
         this.setState({displayModal: false})
     }
 
-    //
-    acceptRelease = async (id: string) => {
-        const response = await API.releases.put(id, { status: ReleaseStatus.accepted })
-
-        if (response.status === 204) {
-            alert("Release accepted")
-            this.getReleases()
-        }
-    }
-    
-    rejectRelease = async (id: string) => {
-        const response = await API.releases.put(id, { status: ReleaseStatus.rejected })
-        
-        if (response.status === 204) {
-            alert("Release rejected.")
-            this.getReleases()
-        }
-    }
-
-    deleteRelease = async (id: string) => {
-        const response = await API.releases.delete(id)
-    
-        if (response.status === 202) {
-            alert("Release removed.")
-            this.getReleases()
-        }
-    }
-
-    restoreAsPending = async (id: string) => {
-        const response = await API.releases.put(id, { status: ReleaseStatus.pending })
-
-        if (response.status === 204) {
-            alert("Release back to pending.")
-            this.getReleases()
-        }
-    }
-    //
-
     render() {
         const { status } = this.state
-        console.log(status)
         const releases = this.releases.value
-
-        const self = this
         
         return (<>
             <SubmissionsModal release={this.state.selectedRelease} close={this.closeModal} display={this.state.displayModal}/>
@@ -119,20 +72,29 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                 maxHeight: "100vh",
                 width: "100vw"
                 }}>
-                <Grid item xs={10} className="d-flex mx-auto" style={{
+                <Grid item xs={12} className="d-flex position-relative" style={{
                     flexBasis: "unset"
                     }}>
-                    <Typography component="h1" variant="h5" className="my-5" style={{
+                    <div className="ml-md-5 d-flex w-100 h-100 position-absolute">
+                        <div className="mr-auto my-auto ml-3 ml-md-0">
+                            <Link to={Routes.private.submissions.selectList}>
+                                <ArrowBack className="mr-1" />
+                                <span className="d-none d-md-inline">Back</span>
+                            </Link>
+                        </div>
+                    </div>
+                    
+                    <Typography component="h1" variant="h5" className="my-5 mx-auto" style={{
                         fontWeight: 800,
                         fontFamily: "Circular"
-                        }}>
+                    }}>
                         {
                             status[0].toUpperCase() + status.slice(1) + " releases."
                         }
                     </Typography>
                 </Grid>
 
-                <TableContainer className="bg-transparent px-md-5 mx-auto" style={{flexGrow: 1}} >
+                <TableContainer className="bg-transparent px-md-5 mx-auto" style={{flexGrow: 1, overflowX: "hidden"}} >
                     <Table stickyHeader>
                         <TableHead>
                             <TableRow>
@@ -152,28 +114,15 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                             {
                                 releases.length > 0 &&
                                 releases.map((release, index) => {
-                                    const controls = (function () {
-                                        switch (ReleaseStatus[status]) {
-                                            case ReleaseStatus.rejected: 
-                                                return <RejectCtrls
-                                                    release={release} 
-                                                    rejectNow={self.deleteRelease}
-                                                    restore={self.restoreAsPending}
-                                                    />
-                                            case ReleaseStatus.pending:  
-                                                return <PendingCtrls
-                                                    release={release}
-                                                    accept={self.acceptRelease}
-                                                    reject={self.rejectRelease}
-                                                    />
-                                            case ReleaseStatus.accepted: 
-                                                console.log(release)
-                                                return <AcceptedCtrls 
-                                                    release={release}
-                                                    />
-                                        }
-                                    })()
 
+                                    const controlProps = {
+                                        status,
+                                        controlsProps: {
+                                            release, 
+                                            refresh: this.getReleases
+                                        }
+                                    }
+                                    
                                     return (
                                     <TableRow className={styles["playlist-row"]} key={uniqid()}>
                                         <TableCell style={{ width: "15px" }}>
@@ -192,7 +141,7 @@ export default class Submissions extends AudioComponent<RouteComponentProps, Sub
                                             <InfoOutlined onClick={() => this.showModal(release)}/>
                                         </TableCell>
                                         <TableCell>
-                                            { controls }
+                                            <Controls {...controlProps} />
                                         </TableCell>
                                     </TableRow>)
                                 })
