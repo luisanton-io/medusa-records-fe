@@ -12,10 +12,11 @@ export default function SelectSubsList() {
     // const currentPath = window.location.pathname
     const selectionButton = styles["selection-button"] + " "
     const [authorized, setAuthorized] = useState(false)
-    useEffect(()=>{(async () => {
+    const checkAuth = async () => {
         const response = await API.checkAuth()
-        setAuthorized(response.status === 204)
-    })()},[]);
+        setAuthorized(response.status === 204)    
+    }
+    useEffect(()=>{checkAuth()}, []);
 
     return (<>{
             authorized ? 
