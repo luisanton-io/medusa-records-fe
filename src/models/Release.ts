@@ -16,6 +16,7 @@ export interface ReleaseData {
     coverURL?: string,
     altContact?: string,
     displayOnHome?: boolean,
+    fanLink?: string,
     status?: ReleaseStatus
 }
 
