@@ -62,7 +62,7 @@ export const API = {
                 credentials: "include"
             }
         ),
-        put: (releaseId: string, data: {status: ReleaseStatus, displayOnHome?: boolean} | {displayOnHome: boolean} | {date: Date}) => fetch(
+        put: (releaseId: string, data: {status?: ReleaseStatus, displayOnHome?: boolean, date?: Date, fanLink?: string}) => fetch(
             `${endpoint.releases}/${releaseId}`, 
             {
                 method: "PUT",
