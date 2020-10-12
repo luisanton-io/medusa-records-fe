@@ -13,6 +13,8 @@ import { useToast } from '../models/Toast/hook'
 import { genericError } from '../models/Toast/genericError'
 import { parseISO } from 'date-fns/esm';
 import { GetApp } from '@material-ui/icons';
+import { ReleaseStatus } from '../models/ReleaseStatus';
+import { TextField } from '@material-ui/core';
  
 
 interface SubmissionsModalProps {
@@ -25,17 +27,21 @@ export default function SubmissionsModal({ release, display, close }: Submission
 
 
     const [date, setDate] = useState(new Date())
+    const [fanLink, setFanLink] = useState('')
     const { setToast } = useToast()
 
     useEffect( () => {
-        if (release) setDate(parseISO(String(release?.date)))
+        if (release) {
+            setDate(parseISO(String(release.date)))
+            setFanLink(release.fanLink || '')
+        }
     }, [release])
 
     if (!release) {return <></>}
 
     const save = async () => {
-        if (date !== release.date) {
-            const response = await API.releases.put(release._id!, {date: date!})
+        if (date !== release.date || fanLink !== release.fanLink) {
+            const response = await API.releases.put(release._id!, {date, fanLink})
             
             response.status !== 204
                 ? setToast(genericError)
@@ -114,6 +120,24 @@ export default function SubmissionsModal({ release, display, close }: Submission
                         <td>Genre:</td>
                         <td>{release.genre}</td>
                     </tr>
+                    {
+                        release.status === ReleaseStatus.accepted &&
+                        <tr>
+                            <td colSpan={2}>
+                                <TextField
+                                    variant="outlined"
+                                    margin="normal"
+                                    fullWidth
+                                    name="fanlink"
+                                    label="Fanlink"
+                                    id="fanlink"
+                                    autoComplete="fanlink"
+                                    onChange={({currentTarget: textField}) => setFanLink(textField.value!)}
+                                    value={fanLink}
+                                    />
+                            </td>
+                        </tr>
+                    }
                 </tbody>
             </Table>
         </Modal.Body>
