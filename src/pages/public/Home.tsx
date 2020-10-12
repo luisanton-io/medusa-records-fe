@@ -38,6 +38,7 @@ export default class Home extends React.Component<{}, HomeState> {
             <Grid container id='home'>
                 <AppBar position="fixed" className="bg-transparent text-white-50">
                     <Toolbar style={{background: 'rgba(18,18,18,0.8)'}}>
+                        <img src="/assets/medusa-original.png" style={{height: '5.5vh', paddingTop: '5px'}} alt="medusa-logo" />
                         <Link to={Routes.public.submit} className='ml-auto'>
                             <Button color="inherit">
                                 Submit Your Release
@@ -67,8 +68,8 @@ export default class Home extends React.Component<{}, HomeState> {
                             this.state.releases.length > 0 &&
                             this.state.releases.map(release =>
                                 <Grid item xs={12} md={4} key={uniqid()}>
-                                    <a href={'https://www.google.com'}>
-                                        <img className='img-fluid px-1' src={release.coverURL!} alt={release.title}/>
+                                    <a href={release.fanLink}>
+                                        <img className='img-fluid px-1 px-md-3 my-3' src={release.coverURL!} alt={release.title}/>
                                     </a>
                                 </Grid>
                             )
