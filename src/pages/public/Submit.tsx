@@ -30,6 +30,7 @@ import { Autocomplete } from "@material-ui/lab";
 import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import { audioSrc } from '../../utilities/audioSrc';
 import { useToast } from '../../models/Toast/hook';
+import Loader from '../../components/Loader';
 //#endregion
 
 //#region Styles
@@ -67,6 +68,7 @@ const useStyles = makeStyles((theme) => ({
 export default function Submit() {
   const classes = useStyles()
 
+  const [loading, setLoading] = useState(false)
   const [release, setRelease] = useState(emptyRelease)
   const [typingArtist, setTypingArtist] = useState("")
   const [typingFeats, setTypingFeats] = useState("")
@@ -85,9 +87,11 @@ export default function Submit() {
 
   const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
+    setLoading(true)
     const response = await API.releases.post(release)
     const { message } = await response.json()
 
+    setLoading(false)
     setSubmitted(response.status === 201)
   
     setToast({
@@ -158,6 +162,7 @@ export default function Submit() {
 
   return (
     <Container component="main" maxWidth="sm" className="my-auto">
+      { loading && <Loader /> }
       <CssBaseline />
       <img
         alt="..."
@@ -165,13 +170,13 @@ export default function Submit() {
         style={{ opacity: "0.1" }}
         src="/assets/submit-bg.jpg" />
       <div className={classes.paper}>
-        <Typography component="h1" variant="h2" className="mt-5" style={{
+        <Typography component="h1" variant="h2" className="my-5" style={{
           fontWeight: 800,
           fontFamily: "Circular"
         }}>
           Submit your track.
         </Typography>
-        <span className="ml-auto mb-5">...if it doesn't suck.</span>
+        {/* <span className="ml-auto mb-5">...if it doesn't suck.</span> */}
         <form className={classes.form} 
           onSubmit={didSubmit} onInvalid={alertInvalid}>
           <Grid container spacing={3} >
