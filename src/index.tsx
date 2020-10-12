@@ -20,7 +20,8 @@ window.fetch = (...args) => (async(args) => {
     }
 
     if (response.status === 401) {
-      window.location.pathname = Routes.public.login
+      if (window.location.pathname !== Routes.public.login) 
+        window.location.pathname = Routes.public.login
     }
 
     return response;
