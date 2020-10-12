@@ -26,7 +26,7 @@ export default class Toaster extends ToastComponent {
                     onClose={this.closeToast}
                     severity={severity}
                     >
-                    { message }
+                    { String(message) }
                 </MuiAlert>
             </Snackbar>
         )
