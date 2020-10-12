@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
@@ -14,7 +14,7 @@ import { Routes } from '../../routes/Routes';
 
 export function Copyright() {
   return (
-    <Typography variant="body2" color="textSecondary" align="center">
+    <Typography variant="body2" color="textSecondary" align="center" className="mb-5">
       {'Copyright © '}
       <Link color="inherit" href="#">
         Medusa Records
@@ -51,9 +51,14 @@ const useStyles = makeStyles((theme) => ({
   }
 }))
 
-export default withRouter(function SignIn() {
+export default withRouter(function Login() {
   const classes = useStyles();
   const [credentials, setCredentials] = useState({username: "", password: ""})
+  const checkAuth = async () => {
+    const response = await API.checkAuth()
+    if (response.status === 204) window.location.pathname = Routes.private.submissions.selectList
+  }
+  useEffect(() => {checkAuth()}, [])
 
   const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
