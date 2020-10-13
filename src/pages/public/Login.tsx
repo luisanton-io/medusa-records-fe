@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import WarningIcon from '@material-ui/icons/Warning';
 import { API } from '../../routes/API';
-import { withRouter } from 'react-router-dom';
+import { useHistory, withRouter } from 'react-router-dom';
 import { Routes } from '../../routes/Routes';
 
 export function Copyright() {
@@ -53,18 +53,19 @@ const useStyles = makeStyles((theme) => ({
 
 export default withRouter(function Login() {
   const classes = useStyles();
+  const history = useHistory()
   const [credentials, setCredentials] = useState({username: "", password: ""})
   const checkAuth = async () => {
     const response = await API.checkAuth()
-    if (response.status === 204) window.location.pathname = Routes.private.submissions.selectList
+    if (response.status === 204) history.push(Routes.private.submissions.selectList)
   }
-  useEffect(() => {checkAuth()}, [])
+  useEffect(() => {checkAuth()})
 
   const didSubmit = async (submitEvent: React.FormEvent<HTMLFormElement>) => {
     submitEvent.preventDefault()
     let response = await API.login(credentials)
 
-    if (response.status === 200) window.location.pathname = Routes.private.submissions.selectList
+    if (response.status === 200) history.push(Routes.private.submissions.selectList)
   }
 
   return (

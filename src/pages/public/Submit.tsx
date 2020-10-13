@@ -440,6 +440,7 @@ export default function Submit() {
                   console.log(toast)
                   if (toast.display) setToast({ ...toast, display: false }) 
                 }}
+                style={{overflow: 'hidden'}}
                 onChange={didSelectFile}
                 required
               />

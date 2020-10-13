@@ -7,6 +7,19 @@ import * as serviceWorker from './serviceWorker';
 import { Routes } from './routes/Routes';
 import { API } from './routes/API';
 
+const location = {
+  get: function() {
+    return process.env.NODE_ENV === 'production' 
+            ? window.location.hash 
+            : window.location.pathname
+  },
+  set: function(value: string) {
+    if (process.env.NODE_ENV === 'production') {
+      window.location.hash = value
+    } else window.location.pathname = value
+  }
+}
+
 const fetch = window.fetch;
 window.fetch = (...args) => (async(args) => {
     let response = await fetch(...args);
@@ -20,8 +33,7 @@ window.fetch = (...args) => (async(args) => {
     }
 
     if (response.status === 401) {
-      if (window.location.pathname !== Routes.public.login) 
-        window.location.pathname = Routes.public.login
+      if (location.get() !== Routes.public.login) location.set(Routes.public.login)
     }
 
     return response;

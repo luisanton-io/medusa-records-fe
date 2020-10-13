@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, BrowserRouter, Switch } from 'react-router-dom';
+import { Route, BrowserRouter, Switch, HashRouter } from 'react-router-dom';
 import { routeProps } from './routes/Routes';
 import uniqid from 'uniqid'
 import './styles/App.scss'
@@ -32,7 +32,7 @@ export const theme = createMuiTheme({
 })
 
 export default function App() {
-  return (<BrowserRouter>
+  const app = (
     <ThemeProvider theme={theme}>
       <Toaster />
       <Switch>
@@ -40,7 +40,11 @@ export default function App() {
           routeProps.map( props => <Route key={ uniqid() } { ...props } /> )
         }
       </Switch>
-      </ThemeProvider>
-    </BrowserRouter>
+    </ThemeProvider>
+  )
+  return ( process.env.NODE_ENV === 'production'
+        ? <HashRouter>{app}</HashRouter>
+        : <BrowserRouter>{app}</BrowserRouter>
+
   );
 }
