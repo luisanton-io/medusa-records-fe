@@ -35,7 +35,11 @@ function RejectCtrls ({release, refresh}: ControlsProps) {
         const response = await API.releases.delete(id)
     
         if (response.status === 202) {
-            alert("Release removed.")
+            setToast({
+                message:"Release removed.",
+                display: true,
+                severity: "success"
+            })
             refresh()
         } else setToast(genericError)
     }
@@ -44,7 +48,11 @@ function RejectCtrls ({release, refresh}: ControlsProps) {
         const response = await API.releases.put(id, { status: ReleaseStatus.pending })
 
         if (response.status === 204) {
-            alert("Release back to pending.")
+            setToast({
+                display: true,
+                message: "Release back to pending.",
+                severity: "success"
+            })
             refresh()
         }
     }
@@ -68,7 +76,11 @@ function PendingCtrls ({release, refresh}: ControlsProps) {
         const response = await API.releases.accept(id)
 
         if (response.status === 204) {
-            alert("Release accepted")
+            setToast({
+                display: true,
+                message: "Release accepted",
+                severity: "success"
+            })
             refresh()
         } else setToast(genericError)
     }
@@ -77,7 +89,11 @@ function PendingCtrls ({release, refresh}: ControlsProps) {
         const response = await API.releases.reject(id)
         
         if (response.status === 204) {
-            alert("Release rejected.")
+            setToast({
+                display: true,
+                message: "Release rejected",
+                severity: "success"
+            })
             refresh()
         } else setToast(genericError)
     }

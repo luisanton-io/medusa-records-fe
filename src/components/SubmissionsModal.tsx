@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { Modal, Button, Badge, Table } from 'react-bootstrap'
 import { ReleaseData } from '../models/Release'
 import uniqid from 'uniqid'
-import { MaterialUiPickersDate } from '@material-ui/pickers/typings/date';
 import {
     MuiPickersUtilsProvider,
     KeyboardDatePicker
@@ -92,28 +91,30 @@ export default function SubmissionsModal({ release, display, close }: Submission
                     <tr>
                         <td>Date:</td>
                         <td>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                                <KeyboardDatePicker
-                                disableToolbar
-                                // className={classes.textField}
-                                variant="inline"
-                                format="dd/MM/yyyy"
-                                fullWidth
-                                inputVariant="outlined"
-                                margin="normal"
-                                id="date-picker-inline"
-                                label="Release Date"
-                                value={date}
-                                onChange={(date: MaterialUiPickersDate) => {
-                                        // console.log(date instanceof Date)
-                                        setDate(date!)
-                                    }
-                                }
-                                KeyboardButtonProps={{
-                                    'aria-label': 'change date',
-                                }}
-                                />
-                            </MuiPickersUtilsProvider>
+                            {
+                                release.status === ReleaseStatus.accepted 
+                                ? 
+                                <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                                    <KeyboardDatePicker
+                                    disableToolbar
+                                    // className={classes.textField}
+                                    variant="inline"
+                                    format="dd/MM/yyyy"
+                                    fullWidth
+                                    inputVariant="outlined"
+                                    margin="normal"
+                                    id="date-picker-inline"
+                                    label="Release Date"
+                                    value={date}
+                                    onChange={(date) => setDate(date as Date)}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                    />
+                                </MuiPickersUtilsProvider>
+                                :
+                                <span>{('0' + date.getDate()).slice(-2)}/{('0' + date.getMonth()).slice(-2)}/{date.getFullYear()}</span>
+                            }
                         </td>
                     </tr>
                     <tr>
