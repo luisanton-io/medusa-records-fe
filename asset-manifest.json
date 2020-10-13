@@ -1,0 +1,25 @@
+{
+  "files": {
+    "main.css": "/medusa-records-fe/static/css/main.c0e499d7.chunk.css",
+    "main.js": "/medusa-records-fe/static/js/main.70d5e833.chunk.js",
+    "main.js.map": "/medusa-records-fe/static/js/main.70d5e833.chunk.js.map",
+    "runtime-main.js": "/medusa-records-fe/static/js/runtime-main.81608246.js",
+    "runtime-main.js.map": "/medusa-records-fe/static/js/runtime-main.81608246.js.map",
+    "static/css/2.d9ad5f5c.chunk.css": "/medusa-records-fe/static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.7359d98b.chunk.js": "/medusa-records-fe/static/js/2.7359d98b.chunk.js",
+    "static/js/2.7359d98b.chunk.js.map": "/medusa-records-fe/static/js/2.7359d98b.chunk.js.map",
+    "index.html": "/medusa-records-fe/index.html",
+    "precache-manifest.e3111160277debfde7eafa89accf075d.js": "/medusa-records-fe/precache-manifest.e3111160277debfde7eafa89accf075d.js",
+    "service-worker.js": "/medusa-records-fe/service-worker.js",
+    "static/css/2.d9ad5f5c.chunk.css.map": "/medusa-records-fe/static/css/2.d9ad5f5c.chunk.css.map",
+    "static/css/main.c0e499d7.chunk.css.map": "/medusa-records-fe/static/css/main.c0e499d7.chunk.css.map",
+    "static/js/2.7359d98b.chunk.js.LICENSE.txt": "/medusa-records-fe/static/js/2.7359d98b.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.81608246.js",
+    "static/css/2.d9ad5f5c.chunk.css",
+    "static/js/2.7359d98b.chunk.js",
+    "static/css/main.c0e499d7.chunk.css",
+    "static/js/main.70d5e833.chunk.js"
+  ]
+}
