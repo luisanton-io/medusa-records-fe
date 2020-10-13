@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/4.3.1/workbox-sw.js");
 
 importScripts(
-  "/medusa-records-fe/precache-manifest.e3111160277debfde7eafa89accf075d.js"
+  "/medusa-records-fe/precache-manifest.2241f6a8fd8ca7f76c0fae70bd5423a6.js"
 );
 
 self.addEventListener('message', (event) => {
