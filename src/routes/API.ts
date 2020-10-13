@@ -28,7 +28,7 @@ export const API = {
         )
     },
     releases: {
-        home: fetch(
+        home: () => fetch(
             `${endpoint.releases}/home`
         ),
         get: (status: string) => fetch(

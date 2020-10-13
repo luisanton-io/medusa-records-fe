@@ -25,7 +25,7 @@ export default class Home extends React.Component<{}, HomeState> {
     }
 
     getReleases = async () => {
-        const response = await API.releases.home
+        const response = await API.releases.home()
         const releases = response.status === 200
             ? (await response.json())
             : []
