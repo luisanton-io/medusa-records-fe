@@ -11,15 +11,15 @@ import Loader from '../../../../components/Loader'
 export default function SelectSubsList() {
     // const currentPath = window.location.pathname
     const selectionButton = styles["selection-button"] + " "
-    const [authorized, setAuthorized] = useState(false)
-    const checkAuth = async () => {
-        const response = await API.checkAuth()
-        setAuthorized(response.status === 204)    
-    }
-    useEffect(()=>{checkAuth()}, []);
+    // const [authorized, setAuthorized] = useState(false)
+    // const checkAuth = async () => {
+    //     const response = await API.checkAuth()
+    //     setAuthorized(response.status === 204)    
+    // }
+    // useEffect(()=>{checkAuth()}, []);
 
-    return (<>{
-            authorized ? 
+    return (
+        // <>{ authorized ? 
             <Grid container>
                 <img
                     alt="..."
@@ -58,7 +58,7 @@ export default function SelectSubsList() {
                     </Link>
                 </Grid>
             </Grid>
-            : <Loader />
-        }</>
+            // : <Loader />
+        // }</>
     )
 }

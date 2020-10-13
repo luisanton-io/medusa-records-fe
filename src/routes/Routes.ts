@@ -25,7 +25,9 @@ export class Routes {
     }
 }
 
-export const routeProps: RouteProps[] = [
+type _RouteProps = RouteProps & {private?: boolean}
+
+export const routeProps: _RouteProps[] = [
     {
         path: Routes.public.home,
         component: Home,
@@ -44,7 +46,8 @@ export const routeProps: RouteProps[] = [
     {
         path: Routes.private.submissions.selectList,
         component: SelectSubsList,
-        exact: true
+        exact: true,
+        private: true
     },
     {
         path: [
@@ -53,7 +56,8 @@ export const routeProps: RouteProps[] = [
             Routes.private.submissions.rejected,
         ],
         component: Submissions,
-        exact: true
+        exact: true,
+        private: true
     },
     {
         component: NotFound //404
