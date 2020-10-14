@@ -469,7 +469,7 @@ export default function Submit() {
                 variant="contained"
                 color="primary"
                 className={classes.submit}
-                disabled={submitted}
+                disabled={submitted || loading}
               >
                 Submit
               </Button>
