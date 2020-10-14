@@ -52,8 +52,8 @@ export default class Home extends React.Component<{}, HomeState> {
                 {/* I am Home. <Link to ={Routes.private.submissions.selectList}>Submissions</Link> */}
                 <Grid item xs={10} className='mx-auto d-flex flex-column'>
 
-                    <Grid item xs={12} md={5} className='d-flex flex-column justify-content-center mx-auto' style={{ minHeight: '100vh' }}>
-                        <div className='bg-circle'></div>
+                    <Grid item xs={12} md={5} className='d-flex flex-column justify-content-center mx-auto' style={{ minHeight: '100vh', flexBasis: 'unset' }}>
+                        <div className='bg-square'></div>
                         <img className="w-50 img-fluid mx-auto blurring" src="/assets/medusa-original.png" alt="medusa-logo" />
                         <MedusaHeader />
                         <Typography component="h5" variant="h5" className="mt-5 ml-auto" style={{
